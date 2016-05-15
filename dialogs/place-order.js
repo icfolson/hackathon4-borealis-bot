@@ -1,3 +1,5 @@
+'use strict';
+
 var builder = require('botbuilder');
 
 const LUIS_ENTITY_CHEESE_TYPE = 'jarvis.sandwich.cheese';

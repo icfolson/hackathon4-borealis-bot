@@ -1,3 +1,5 @@
+'use strict';
+
 var azure = require('azure-storage');
 var q = require('q');
 var fs = require('fs');
