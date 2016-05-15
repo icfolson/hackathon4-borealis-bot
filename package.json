@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
-  "author": "",
+  "author": "ICF Olson",
   "license": "ISC",
   "dependencies": {
     "azure-storage": "^0.10.0",
