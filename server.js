@@ -9,7 +9,7 @@ var inquireCheeseInit = require('./dialogs/place-order');
 
 //load these values from the environment
 var luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=5cdc03d1-9d72-427b-b763-2054d3877b90&subscription-key=568c2ba8438a4aa3956a2cadf0aad4c1';
-var bot = new builder.BotConnectorBot({ appId: 'icfolsonhackathonjarvisbot', appSecret: 'aa81365c38d541e6a92be1a9dfca14a9' });
+var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
 
 //root intent handler
 bot.add('/', new builder.LuisDialog(luisModel)
