@@ -1,0 +1,9 @@
+[
+    {"PartitionKey": "cheese-type", "RowKey":"American", "Code":"American"},
+    
+    {"PartitionKey": "cheese-type", "RowKey":"Monterey Cheddar", "Code":"Monterey Cheddar"},
+    
+    {"PartitionKey": "cheese-type", "RowKey":"Pepperjack", "Code":"Pepperjack"},
+    {"PartitionKey": "cheese-type", "RowKey":"Pepper Jack", "Code":"Pepperjack"},
+    {"PartitionKey": "cheese-type", "RowKey":"pjack", "Code":"Pepperjack"}                
+]
