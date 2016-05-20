@@ -27,7 +27,7 @@ Intake.prototype = {
     });
   },
 
-  addItem: function(item, callback) {
+  addOrUpdateItem: function(item, callback) {
     self = this;
     // use entityGenerator to set types
     // NOTE: RowKey must be a string type, even though
@@ -42,7 +42,7 @@ Intake.prototype = {
       source: entityGen.String(item.source ? item.source : null),
     };
 
-    self.storageClient.insertEntity(self.tableName, itemDescriptor, function entityInserted(error) {
+    self.storageClient.insertOrMergeEntity(self.tableName, itemDescriptor, function entityInserted(error) {
       if(error){  
         callback(error);
       }

@@ -9,6 +9,8 @@ var accountName = "borealiststest"; // 'STORAGE_NAME'
 var accountKey = "kqVzaboKITxfcNdgq9Ws2zX/DGsemwBsXIfGO8CpAmuTZEBnX/ozO2zT1hE1gSi5k2PuRYeDfFnQxuawxvDM7Q=="; // 'STORAGE_KEY'
 var azure = require('azure-storage');
 var async = require('async');
+var Entity = require('../models/entity');
+var q = require('q');
 
 var builder = require('botbuilder');
 
@@ -19,7 +21,7 @@ const LUIS_ENTITY_ACTIVITY = 'borealis.activity';
 const LUIS_ENTITY_SOURCE = 'borealis.source';
 
 const _handleViceSource = (session, newIntake) => {
-    let source = 'alcohol'
+    let source = newIntake.source;
     
     session.dialogData.order.source = source;
     
@@ -29,9 +31,35 @@ const _handleViceSource = (session, newIntake) => {
 };
 
 const _buildLuisEntities = (entities, entityName) => {
-    let parsedEntity = builder.EntityRecognizer.findEntity(entities, entityName);
+    var entity = new Entity(azure.createTableService(accountName, accountKey), 'entities', entityName);
     
-    return parsedEntity ? parsedEntity.entity : null;
+    let dfd = q.defer();
+    let parsedEntity = builder.EntityRecognizer.findEntity(entities, entityName);
+    let foo = parsedEntity ? parsedEntity.entity : null;
+    
+    var query = azure.TableQuery().where("RowKey eq ?", foo);
+    
+    let thing = entity.find(query, function doSomething(error, res) {
+        dfd.resolve(res.Type);
+    })
+    
+    return dfd.promise();
+};
+
+const parseArguments = (newIntake, args) => {
+    let dfd = q.defer();
+    
+    _buildLuisEntities(args.entities, LUIS_ENTITY_SOURCE).then((x) => {
+        newIntake.source = x;
+        
+        return _buildLuisEntities(args.entities, LUIS_ENTITY_ACTIVITY);
+    }).then((x) => {
+        newIntake.activity = x;
+        
+        dfd.resolve();
+    });
+    
+    return dfd.promise();
 };
 
 /* BEGIN: Intake */
@@ -42,18 +70,20 @@ const initializeOrder = (session, args, next) => {
        
     var newIntake = { 
         personId: session.message.from.id,
-        conversationId: session.message.conversationId,
-        activity: _buildLuisEntities(args.entities, LUIS_ENTITY_ACTIVITY),
-        source: _buildLuisEntities(args.entities, LUIS_ENTITY_SOURCE)
+        conversationId: session.message.conversationId
     };
-            
-    intake.addItem(newIntake, function intakeAdded (error) {
-        if(error) {
-            throw error;
-        }
-    });
+    
+    parseArguments(newIntake, args).then((x) => {
+        intake.addOrUpdateItem(newIntake, function intakeAdded (error) {
+            if(error) {
+                throw error;
+            }
+        });
 
-    _handleViceSource(session, newIntake);
+        _handleViceSource(session, newIntake);
+    });
+    
+    
 };
 
 const intakeName = (session, results, next) => {
