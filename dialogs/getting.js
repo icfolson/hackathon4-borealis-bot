@@ -18,8 +18,14 @@ var intake = new Intake(azure.createTableService(accountName, accountKey), table
 const LUIS_ENTITY_ACTIVITY = 'borealis.activity';
 const LUIS_ENTITY_SOURCE = 'borealis.source';
 
-const _handleAlcoholSource = (session) => {
-    session.endDialog('Alcohol is a common factor in erectile dysfunction.  How often does this occur?');
+const _handleViceSource = (session, newIntake) => {
+    let source = 'alcohol'
+    
+    session.dialogData.order.source = source;
+    
+    if (source == 'alcohol') {
+        builder.Prompts.text(session, 'Drinking can be a cause. How often does this happen?');
+    }
 };
 
 const _buildLuisEntities = (entities, entityName) => {
@@ -47,10 +53,30 @@ const initializeOrder = (session, args, next) => {
         }
     });
 
-    _handleAlcoholSource(session);
+    _handleViceSource(session, newIntake);
 };
+
+const intakeName = (session, results, next) => {
+    let order = session.dialogData.order;
+
+    if ( order.source ) {
+        //get the intake ...
+        
+        var inTake = {
+            source: results.response
+        }
+        
+        //save the state back  
+    }
+
+    session.send('Let’s chat more about this during your visit. Is there anything else you would like to share?');
+
+    next(session);
+};
+
 /* END: Intake */
 
 module.exports = [
-    initializeOrder
+    initializeOrder,
+    intakeName
 ];
