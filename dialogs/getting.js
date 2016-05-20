@@ -7,7 +7,7 @@ const LUIS_ENTITY_SOURCE = 'borealis.source';
 
 
 const _handleAlcoholSource = (session) => {
-    session.send('Alcohol is a common factor in erectile dysfunction.  How often does this occur?');
+    session.endDialog('Alcohol is a common factor in erectile dysfunction.  How often does this occur?');
 };
 
 
