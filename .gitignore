@@ -34,3 +34,6 @@ node_modules
 
 # Environment Settings
 set-env.sh
+
+# ctags
+tags
