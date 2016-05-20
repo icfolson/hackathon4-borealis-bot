@@ -38,9 +38,10 @@ Intake.prototype = {
       personId: entityGen.String(item.personId),
       conversationId: entityGen.String(item.conversationId),
       completed: entityGen.Boolean(false),
-      activity: entityGen.String(item.activity ? typeof(item.activity != 'undefined') : null),
-      source: entityGen.String(item.source ? typeof(item.source) != 'undefined' : null),
+      activity: entityGen.String(item.activity ? item.activity : null),
+      source: entityGen.String(item.source ? item.source : null),
     };
+
     self.storageClient.insertEntity(self.tableName, itemDescriptor, function entityInserted(error) {
       if(error){  
         callback(error);
