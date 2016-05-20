@@ -4,35 +4,30 @@ var restify = require('restify');
 var builder = require('botbuilder');
 
 //import dialogs
-//var placeOrderInit = require('./dialogs/place-order');
-//var inquireCheeseInit = require('./dialogs/place-order');
+var placeOrderInit = require('./dialogs/place-order');
+var inquireCheeseInit = require('./dialogs/place-order');
 
 //load these values from the environment
-var luisModel = 'https://luis-actions.cloudapp.net/api/v1/botframework?app-id=19d42dd0-96cd-47db-b2a2-259b679e5f45&subscription-key=f7e7b16408d64750ba8188fd25837887';
+var luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=19d42dd0-96cd-47db-b2a2-259b679e5f45&subscription-key=f7e7b16408d64750ba8188fd25837887';
 var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
+//var bot = new builder.BotConnectorBot({ appId: 'icfolsonborealisbot', appSecret: 'aa81d008af2e4ae4a7e3e43314178b0e' });
 
 //root intent handler
 
 bot.add('/', new builder.LuisDialog(luisModel)
-    .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
-);
-
-/*
-bot.add('/', new builder.LuisDialog(luisModel)
     .on('borealis.maintaining', '/Maintaining')
+    .on('borealis.getting', '/Getting')    
     .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
 );
 
-//place order intent
+//dialogs
 bot.add('/Maintaining', 
-    () => { console.log('hi');}
+    placeOrderInit
 );
-*/
-//inquire about cheese
-/*
+
 bot.add('/Getting', 
     inquireCheeseInit
-);*/
+);
 
 // Setup Restify Server
 var server = restify.createServer();
