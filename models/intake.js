@@ -34,12 +34,14 @@ Intake.prototype = {
     // it contains a GUID in this example.
     var itemDescriptor = {
       PartitionKey: entityGen.String(self.partitionKey),
-      RowKey: entityGen.String(uuid()),
+      RowKey: entityGen.String(item.conversationId),
       personId: entityGen.String(item.personId),
       conversationId: entityGen.String(item.conversationId),
       completed: entityGen.Boolean(false),
       activity: entityGen.String(item.activity ? item.activity : null),
+      activityComment: entityGen.String(item.activityComment ? item.activityComment : null),      
       source: entityGen.String(item.source ? item.source : null),
+      sourceComment: entityGen.String(item.sourceComment ? item.sourceComment : null),
     };
 
     self.storageClient.insertOrMergeEntity(self.tableName, itemDescriptor, function entityInserted(error) {

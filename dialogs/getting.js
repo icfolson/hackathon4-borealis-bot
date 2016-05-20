@@ -15,20 +15,34 @@ var q = require('q');
 var builder = require('botbuilder');
 
 var Intake = require('../models/intake');
-var intake = new Intake(azure.createTableService(accountName, accountKey), tableName, partitionKey);
+var intakeTable = new Intake(azure.createTableService(accountName, accountKey), tableName, partitionKey);
 
 const LUIS_ENTITY_ACTIVITY = 'borealis.activity';
 const LUIS_ENTITY_SOURCE = 'borealis.source';
 
-const _handleViceSource = (session, newIntake) => {
-    let source = newIntake.source;
+const ACTIVITY_TYPE_SOLO = 'solo';
+
+const SOURCE_TYPE_ALCOHOL = 'alcohol';
+const SOURCE_TYPE_DRUGS = 'drugs';
+const SOURCE_TYPE_SMOKING = 'smoking';
+
+const _handleViceSource = (session) => {
+    let intake = session.dialogData.intake;
     
-    console.log('the vice source is ' + source);
-    
-    session.dialogData.order.source = source;
-    
-    if (source == 'alcohol') {
+    console.log(JSON.stringify(intake));
+            
+    if (intake.source == SOURCE_TYPE_ALCOHOL) {
         builder.Prompts.text(session, 'Drinking can be a cause. How often does this happen?');
+    }
+};
+
+const _handleActivity = (session) => {
+    let intake = session.dialogData.intake;
+    
+    console.log(JSON.stringify(intake));
+            
+    if (intake.activity == ACTIVITY_TYPE_SOLO) {
+        builder.Prompts.text(session, 'Some text?');
     }
 };
 
@@ -39,7 +53,7 @@ const _buildLuisEntities = (entities, entityName) => {
     let parsedEntity = builder.EntityRecognizer.findEntity(entities, entityName);
     let entityValue = parsedEntity ? parsedEntity.entity : null;
     
-    console.log('looking up entity ' + entityName);
+    console.log('looking up entity ' + entityName + ' with value ' + entityValue);
     
     if( entityValue ) {
         let azureQuery = new azure.TableQuery();
@@ -47,6 +61,7 @@ const _buildLuisEntities = (entities, entityName) => {
         let query = azureQuery.where("RowKey eq ?", entityValue);
         
         let thing = entity.find(query, (error, res) => {
+            console.log(JSON.stringify(res));
             let value = res && res.length > 0 ? res[0].Type._ : null;
             dfd.resolve(value);
         }); 
@@ -77,50 +92,72 @@ const _parseArguments = (newIntake, args) => {
 };
 
 /* BEGIN: Intake */
-const initializeOrder = (session, args, next) => {
-    if (!session.dialogData.order) {
-        session.dialogData.order = {};
+const initializeIntake = (session, args, next) => {
+    if (!session.dialogData.intake) {
+        session.dialogData.intake = {
+            personId: session.message.from.id,
+            conversationId: session.message.conversationId
+        };
     }
        
-    var newIntake = { 
-        personId: session.message.from.id,
-        conversationId: session.message.conversationId
-    };
+    let intake = session.dialogData.intake;
     
-    _parseArguments(newIntake, args).then((x) => {
-        intake.addOrUpdateItem(newIntake, function intakeAdded (error) {
+    _parseArguments(intake, args).then((x) => {
+        console.log('updating the intake.');
+        intakeTable.addOrUpdateItem(intake, function intakeAdded (error) {
             if(error) {
                 throw error;
             }
         });
 
-        _handleViceSource(session, newIntake);
-    });
-    
-    
+        _handleActivity(session);
+    });    
 };
 
-const intakeName = (session, results, next) => {
-    let order = session.dialogData.order;
+const intakeActivity = (session, results, next) => {
+    let intake = session.dialogData.intake;
 
-    if ( order.source ) {
-        //get the intake ...
+    if ( intake.activity ) {
         
-        var inTake = {
-            source: results.response
-        }
+        intake.activityComment = results.response;
         
-        //save the state back  
+        intakeTable.addOrUpdateItem(intake, (error) => {
+            if(error) {
+                throw error;
+            }
+        });
+        
+        _handleViceSource(session);
     }
 
-    session.send('Let’s chat more about this during your visit. Is there anything else you would like to share?');
-
     next(session);
+};
+
+const intakeSource = (session, results, next) => {
+    let intake = session.dialogData.intake;
+
+    if ( intake.source ) {      
+        intake.sourceComment = results.response;
+        
+        intakeTable.addOrUpdateItem(intake, (error) => {
+            if(error) {
+                throw error;
+            }
+        });
+    }
+    
+    next(session);    
+};
+
+const endConversation = (session, results, next) => {
+    session.send('Let’s chat more about this during your visit. Is there anything else you would like to share?');
 };
 
 /* END: Intake */
 
 module.exports = [
-    initializeOrder,
-    intakeName
+    initializeIntake,
+    intakeActivity,    
+    intakeSource,
+    endConversation
 ];
