@@ -23,6 +23,8 @@ const LUIS_ENTITY_SOURCE = 'borealis.source';
 const _handleViceSource = (session, newIntake) => {
     let source = newIntake.source;
     
+    console.log('the vice source is ' + source);
+    
     session.dialogData.order.source = source;
     
     if (source == 'alcohol') {
@@ -31,35 +33,47 @@ const _handleViceSource = (session, newIntake) => {
 };
 
 const _buildLuisEntities = (entities, entityName) => {
-    var entity = new Entity(azure.createTableService(accountName, accountKey), 'entities', entityName);
+    let entity = new Entity(azure.createTableService(accountName, accountKey), 'entities', entityName);
     
     let dfd = q.defer();
     let parsedEntity = builder.EntityRecognizer.findEntity(entities, entityName);
-    let foo = parsedEntity ? parsedEntity.entity : null;
+    let entityValue = parsedEntity ? parsedEntity.entity : null;
     
-    var query = azure.TableQuery().where("RowKey eq ?", foo);
+    console.log('looking up entity ' + entityName);
     
-    let thing = entity.find(query, function doSomething(error, res) {
-        dfd.resolve(res.Type);
-    })
+    if( entityValue ) {
+        let azureQuery = new azure.TableQuery();
+            
+        let query = azureQuery.where("RowKey eq ?", entityValue);
+        
+        let thing = entity.find(query, (error, res) => {
+            let value = res && res.length > 0 ? res[0].Type._ : null;
+            dfd.resolve(value);
+        }); 
+    } else {
+        console.log('did not recieve anything from luis for ' + entityName);
+        dfd.resolve(null);
+    }
     
-    return dfd.promise();
+    return dfd.promise;
 };
 
-const parseArguments = (newIntake, args) => {
+const _parseArguments = (newIntake, args) => {
     let dfd = q.defer();
     
     _buildLuisEntities(args.entities, LUIS_ENTITY_SOURCE).then((x) => {
+        console.log('parsed source.');
         newIntake.source = x;
         
         return _buildLuisEntities(args.entities, LUIS_ENTITY_ACTIVITY);
     }).then((x) => {
+        console.log("parsed activity");
         newIntake.activity = x;
         
         dfd.resolve();
     });
     
-    return dfd.promise();
+    return dfd.promise;
 };
 
 /* BEGIN: Intake */
@@ -73,7 +87,7 @@ const initializeOrder = (session, args, next) => {
         conversationId: session.message.conversationId
     };
     
-    parseArguments(newIntake, args).then((x) => {
+    _parseArguments(newIntake, args).then((x) => {
         intake.addOrUpdateItem(newIntake, function intakeAdded (error) {
             if(error) {
                 throw error;
