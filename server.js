@@ -4,29 +4,33 @@ var restify = require('restify');
 var builder = require('botbuilder');
 
 //import dialogs
-var placeOrderInit = require('./dialogs/place-order');
-var inquireCheeseInit = require('./dialogs/place-order');
+var gettingDialog = require('./dialogs/getting');
+var frequencyDialog = require('./dialogs/frequency');
 
 //load these values from the environment
 var luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=19d42dd0-96cd-47db-b2a2-259b679e5f45&subscription-key=f7e7b16408d64750ba8188fd25837887';
 var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
-//var bot = new builder.BotConnectorBot({ appId: 'icfolsonborealisbot', appSecret: 'aa81d008af2e4ae4a7e3e43314178b0e' });
 
 //root intent handler
-
 bot.add('/', new builder.LuisDialog(luisModel)
-    .on('borealis.maintaining', '/Maintaining')
-    .on('borealis.getting', '/Getting')    
+    .on('borealis.getting', '/Getting')     
+    .on('borealis.frequency', '/Frequency')  
     .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
 );
 
 //dialogs
+/*
 bot.add('/Maintaining', 
     placeOrderInit
-);
+);*/
 
 bot.add('/Getting', 
-    inquireCheeseInit
+    gettingDialog
+);
+
+
+bot.add('/Frequency', 
+    frequencyDialog
 );
 
 // Setup Restify Server
