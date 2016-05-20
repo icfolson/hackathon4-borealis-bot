@@ -40,8 +40,7 @@ const initializeOrder = (session, args, next) => {
         session.dialogData.luisEntities = {};
     }
     
-    session.send('This is your conversation id: ' + session.message.conversationId);
-    session.send('This is your from id: ' + session.message.from.id);
+    session.send('Your from and conversation ids are: ' + session.message.from.id + ' and ' + session.message.conversationId);
 
     let sandwichType = builder.EntityRecognizer.findEntity(args.entities, LUIS_ENTITY_SANDWICH_TYPE);
     let cheeseType = builder.EntityRecognizer.findEntity(args.entities, LUIS_ENTITY_CHEESE_TYPE);
