@@ -89,6 +89,8 @@ const initializeIntake = (session, args, next) => {
         });
 
         activitySubDialog.handle(session);
+        
+        next(session);
     });
 };
 

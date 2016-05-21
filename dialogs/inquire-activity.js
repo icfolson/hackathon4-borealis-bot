@@ -28,7 +28,8 @@ const handle = (session) => {
             
     if (intake.activity === ACTIVITY_TYPE_SOLO) {
         builder.Prompts.text(session, 'Solo text');
-    } else if (intake.activity === ACTIVITY_TYPE_PARTNER) {
+    } 
+    else if (intake.activity === ACTIVITY_TYPE_PARTNER) {
         builder.Prompts.text(session, 'Are you able to stay hard the whole time you’re having sex?');
     }
 };
