@@ -78,7 +78,7 @@ const initializeIntake = (session, args, next) => {
         };
     }
     
-    console.log(JSON.stringify(args));
+    console.log('The args are -->' + JSON.stringify(args));
     let intake = session.dialogData.intake;
     
     _parseArguments(intake, args).then((x) => {
