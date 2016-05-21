@@ -11,7 +11,7 @@ const initializeOrder = (session, args, next) => {
     //save to state somehow
     
     console.log(JSON.stringify(args));    
-    session.send('Ok, thanks for that information.');
+    session.send('Ok, thanks for that information. [in frequency]');
 };
 /* END: Intake */
 
