@@ -45,8 +45,6 @@ const intake = (session, results) => {
                 throw error;
             }
         });
-        
-        session.send('Thanks, we can chat about this at your visit.');
     }
 };
 

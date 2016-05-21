@@ -106,7 +106,7 @@ const intakeSource = (session, results, next) => {
 };
 
 const endConversation = (session, results, next) => {
-    session.send('Let’s chat more about this during your visit. Is there anything else you would like to share?');
+    session.endDialog('Let’s chat more about this during your visit. Is there anything else you would like to share?');
 };
 
 /* END: Intake */
