@@ -1,4 +1,5 @@
 
+'use strict';
 
 var uuid = require('node-uuid');
 var tableName = "intakes"; // 'TABLE_NAME'

@@ -1,3 +1,5 @@
+'use strict';
+
 var azure = require('azure-storage');
 var uuid = require('node-uuid');
 var entityGen = azure.TableUtilities.entityGenerator;
