@@ -52,6 +52,7 @@ const _buildLuisEntities = (entities, entityName) => {
 
 const _parseArguments = (newIntake, args) => {
     let dfd = q.defer();
+    console.log('args are --> ' + args);
     
     _buildLuisEntities(args.entities, LUIS_ENTITY_SOURCE).then((x) => {
         console.log('parsed source.');
@@ -76,7 +77,7 @@ const initializeIntake = (session, args, next) => {
             conversationId: session.message.conversationId
         };
     }
-       
+         
     let intake = session.dialogData.intake;
     
     _parseArguments(intake, args).then((x) => {
