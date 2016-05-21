@@ -11,7 +11,7 @@ const initializeOrder = (session, args, next) => {
     //save to state somehow
     
     console.log('The args are -->' + JSON.stringify(args));    
-    session.send('Ok, thanks for that information. [in frequency]');
+    session.endDialog('Ok, thanks for that information. [in frequency]');
 };
 /* END: Intake */
 
