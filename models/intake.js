@@ -19,7 +19,7 @@ function Intake(storageClient, tableName, partitionKey) {
 
 Intake.prototype = {
   find: function(query, callback) {
-    self = this;
+    let self = this;
     self.storageClient.queryEntities(this.tableName, query, null, function entitiesQueried(error, result) {
       if(error) {
         callback(error);
@@ -30,7 +30,7 @@ Intake.prototype = {
   },
 
   addOrUpdateItem: function(item, callback) {
-    self = this;
+    let self = this;
     // use entityGenerator to set types
     // NOTE: RowKey must be a string type, even though
     // it contains a GUID in this example.
@@ -55,7 +55,7 @@ Intake.prototype = {
   },
 
   updateItem: function(rKey, callback) {
-    self = this;
+    let self = this;
     self.storageClient.retrieveEntity(self.tableName, self.partitionKey, rKey, function entityQueried(error, entity) {
       if(error) {
         callback(error);

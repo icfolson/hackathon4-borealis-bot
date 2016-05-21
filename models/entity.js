@@ -22,7 +22,7 @@ Entity.prototype = {
     // Example query:
     // var query = new azure.TableQuery()
     //    .where('PartitionKey eq ?', partitionKey).and('ColumnName eq ?', whatever);
-    self = this;
+    let self = this;
     self.storageClient.queryEntities(this.tableName, query, null, function entitiesQueried(error, result) {
       if(error) {
         callback(error);
