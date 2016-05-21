@@ -52,13 +52,13 @@ const _buildLuisEntities = (entities, entityName) => {
 
 const _parseArguments = (newIntake, args) => {
     let dfd = q.defer();
-    console.log('args are --> ' + args);
+    let entities = args ? args.entities : [];
     
-    _buildLuisEntities(args.entities, LUIS_ENTITY_SOURCE).then((x) => {
+    _buildLuisEntities(entities, LUIS_ENTITY_SOURCE).then((x) => {
         console.log('parsed source.');
         newIntake.source = x;
         
-        return _buildLuisEntities(args.entities, LUIS_ENTITY_ACTIVITY);
+        return _buildLuisEntities(entities, LUIS_ENTITY_ACTIVITY);
     }).then((x) => {
         console.log("parsed activity");
         newIntake.activity = x;
