@@ -24,10 +24,9 @@ bot.add('/Maintaining',
     placeOrderInit
 );*/
 
-bot.add('/Getting', 
+bot.add('/Getting',
     gettingDialog
 );
-
 
 bot.add('/Frequency', 
     frequencyDialog
