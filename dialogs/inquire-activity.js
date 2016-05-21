@@ -21,7 +21,7 @@ const ACTIVITY_TYPE_PARTNER = 'partner';
 
 
 const handle = (session) => {
-    let intake = session.dialogData.intake;
+    let intake = session.userData.intake;
     
     console.log('in activity sub dialog');
     console.log(JSON.stringify(intake));
@@ -36,7 +36,7 @@ const handle = (session) => {
 
 
 const intake = (session, results) => {
-    let intake = session.dialogData.intake;
+    let intake = session.userData.intake;
 
     if ( intake.activity ) {
         intake.activityComment = results.response;

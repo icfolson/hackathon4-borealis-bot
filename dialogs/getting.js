@@ -71,15 +71,15 @@ const _parseArguments = (newIntake, args) => {
 
 /* BEGIN: Intake */
 const initializeIntake = (session, args, next) => {
-    if (!session.dialogData.intake) {
-        session.dialogData.intake = {
+    if (!session.userData.intake) {
+        session.userData.intake = {
             personId: session.message.from.id,
             conversationId: session.message.conversationId
         };
     }
     
     console.log('The args are -->' + JSON.stringify(args));
-    let intake = session.dialogData.intake;
+    let intake = session.userData.intake;
     
     _parseArguments(intake, args).then((x) => {
         console.log('updating the intake.');

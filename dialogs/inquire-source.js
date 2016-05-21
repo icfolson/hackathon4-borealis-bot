@@ -26,7 +26,7 @@ const SOURCE_TYPE_PRESCRIPTION = 'rx-drug';
 
 
 const handle = (session) => {
-    let intake = session.dialogData.intake;
+    let intake = session.userData.intake;
     
     console.log('in source sub dialog');    
     console.log(JSON.stringify(intake));
@@ -51,13 +51,14 @@ const handle = (session) => {
             builder.Prompts.text(session, 'Medication can be a cause. What medications are you currently taking?');
             break;
         default:
+            builder.Prompts.text(session, 'Do you have any thoughts on what might be causing it?');
             break;
     }
 };
 
 
 const intake = (session, results) => {
-    let intake = session.dialogData.intake;
+    let intake = session.userData.intake;
 
     if ( intake.source ) {      
         intake.sourceComment = results.response;

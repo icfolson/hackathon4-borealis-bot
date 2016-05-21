@@ -13,17 +13,21 @@ var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret
 
 //root intent handler
 bot.add('/', new builder.LuisDialog(luisModel)
-    .on('borealis.getting', '/Getting')     
-    .on('borealis.frequency', '/Frequency')  
-    .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
+    .on('borealis.getting', '/Getting')      
+    .onDefault((session) => {
+        let currentConvoId = session.message.conversationId;
+        
+        if ( session.userData.intake ) {
+            session.endDialog('Your intake convo id is ' + session.userData.intake.conversationId + ' and the current one is ' + session.message.conversationId);
+        }
+        else {
+            session.endDialog('I\'m sorry I didn\'t understand.' + currentConvoId);            
+        }
+    })
 );
 
 bot.add('/Getting',
     gettingDialog
-);
-
-bot.add('/Frequency', 
-    frequencyDialog
 );
 
 // Setup Restify Server
