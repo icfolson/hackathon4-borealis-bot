@@ -17,59 +17,11 @@ var builder = require('botbuilder');
 var Intake = require('../models/intake');
 var intakeTable = new Intake(azure.createTableService(accountName, accountKey), tableName, partitionKey);
 
+var activitySubDialog = require('./inquire-activity');
+var sourceSubDialog = require('./inquire-source');
+
 const LUIS_ENTITY_ACTIVITY = 'borealis.activity';
 const LUIS_ENTITY_SOURCE = 'borealis.source';
-
-const ACTIVITY_TYPE_SOLO = 'solo';
-const ACTIVITY_TYPE_PARTNER = 'partner';
-
-const SOURCE_TYPE_ALCOHOL = 'alcohol';
-const SOURCE_TYPE_DRUGS = 'drugs';
-const SOURCE_TYPE_SMOKING = 'smoking';
-const SOURCE_TYPE_STRESS = 'stressed';
-const SOURCE_TYPE_DISEASE = 'disease';
-const SOURCE_TYPE_PRESCRIPTION = 'rx-drug';
-
-const _handleViceSource = (session) => {
-    let intake = session.dialogData.intake;
-    
-    console.log(JSON.stringify(intake));
-    
-    switch (intake.source) {
-        case SOURCE_TYPE_ALCOHOL:
-            builder.Prompts.text(session, 'Drinking can be a cause. How often does this happen?');
-            break;
-        case SOURCE_TYPE_DRUGS:
-            builder.Prompts.text(session, 'Drug use can be a cause. How often does this happen?');
-            break;
-        case SOURCE_TYPE_SMOKING:
-            builder.Prompts.text(session, 'Smoking can be a cause. How often does this happen?');
-            break;
-        case SOURCE_TYPE_DISEASE:
-            builder.Prompts.text(session, 'Are you currently on any medications? If yes, what ones?');
-            break;
-        case SOURCE_TYPE_STRESS:
-            builder.Prompts.text(session, 'Stress can impact performance. How often does this happen?');
-            break;
-        case SOURCE_TYPE_PRESCRIPTION:
-            builder.Prompts.text(session, 'Medication can be a cause. What medications are you currently taking?');
-            break;
-        default:
-            break;
-    }
-};
-
-const _handleActivity = (session) => {
-    let intake = session.dialogData.intake;
-    
-    console.log(JSON.stringify(intake));
-            
-    if (intake.activity === ACTIVITY_TYPE_SOLO) {
-        builder.Prompts.text(session, 'Solo text');
-    } else if (intake.activity === ACTIVITY_TYPE_PARTNER) {
-        builder.Prompts.text(session, 'Partner text');
-    }
-};
 
 const _buildLuisEntities = (entities, entityName) => {
     let entity = new Entity(azure.createTableService(accountName, accountKey), 'entities', entityName);
@@ -129,46 +81,26 @@ const initializeIntake = (session, args, next) => {
     
     _parseArguments(intake, args).then((x) => {
         console.log('updating the intake.');
-        intakeTable.addOrUpdateItem(intake, function intakeAdded (error) {
+        intakeTable.addOrUpdateItem(intake, (error) => {
             if(error) {
                 throw error;
             }
         });
 
-        _handleActivity(session);
+        activitySubDialog.handle(session);
     });
 };
 
 const intakeActivity = (session, results, next) => {
-    let intake = session.dialogData.intake;
+    activitySubDialog.intake(session, results);
 
-    if ( intake.activity ) {
-        intake.activityComment = results.response;
-        
-        intakeTable.addOrUpdateItem(intake, (error) => {
-            if(error) {
-                throw error;
-            }
-        });
-        
-        _handleViceSource(session);
-    }
-
+    sourceSubDialog.handle(session);
+    
     next(session);
 };
 
 const intakeSource = (session, results, next) => {
-    let intake = session.dialogData.intake;
-
-    if ( intake.source ) {
-        intake.sourceComment = results.response;
-        
-        intakeTable.addOrUpdateItem(intake, (error) => {
-            if(error) {
-                throw error;
-            }
-        });
-    }
+    sourceSubDialog.intake(session, results);
     
     next(session);    
 };

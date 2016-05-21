@@ -10,26 +10,33 @@ var async = require('async');
 var Entity = require('../models/entity');
 var q = require('q');
 
+var builder = require('botbuilder');
+
 var Intake = require('../models/intake');
 var intakeTable = new Intake(azure.createTableService(accountName, accountKey), tableName, partitionKey);
+
+const ACTIVITY_TYPE_SOLO = 'solo';
+const ACTIVITY_TYPE_PARTNER = 'partner';
 
 
 const handle = (session) => {
     let intake = session.dialogData.intake;
     
+    console.log('in activity sub dialog');
     console.log(JSON.stringify(intake));
             
-    if (intake.activity == ACTIVITY_TYPE_SOLO) {
-        builder.Prompts.text(session, 'Some text?');
+    if (intake.activity === ACTIVITY_TYPE_SOLO) {
+        builder.Prompts.text(session, 'Solo text');
+    } else if (intake.activity === ACTIVITY_TYPE_PARTNER) {
+        builder.Prompts.text(session, 'Partner text');
     }
 };
 
 
-const intake = (session, results, next) => {
+const intake = (session, results) => {
     let intake = session.dialogData.intake;
 
     if ( intake.activity ) {
-        
         intake.activityComment = results.response;
         
         intakeTable.addOrUpdateItem(intake, (error) => {
@@ -37,11 +44,7 @@ const intake = (session, results, next) => {
                 throw error;
             }
         });
-        
-        _handleViceSource(session);
     }
-
-    next(session);
 };
 
 module.exports = {
