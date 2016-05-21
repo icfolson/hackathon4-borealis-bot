@@ -21,18 +21,41 @@ const LUIS_ENTITY_ACTIVITY = 'borealis.activity';
 const LUIS_ENTITY_SOURCE = 'borealis.source';
 
 const ACTIVITY_TYPE_SOLO = 'solo';
+const ACTIVITY_TYPE_PARTNER = 'partner';
 
 const SOURCE_TYPE_ALCOHOL = 'alcohol';
 const SOURCE_TYPE_DRUGS = 'drugs';
 const SOURCE_TYPE_SMOKING = 'smoking';
+const SOURCE_TYPE_STRESS = 'stressed';
+const SOURCE_TYPE_DISEASE = 'disease';
+const SOURCE_TYPE_PRESCRIPTION = 'rx-drug';
 
 const _handleViceSource = (session) => {
     let intake = session.dialogData.intake;
     
     console.log(JSON.stringify(intake));
-            
-    if (intake.source == SOURCE_TYPE_ALCOHOL) {
-        builder.Prompts.text(session, 'Drinking can be a cause. How often does this happen?');
+    
+    switch (intake.source) {
+        case SOURCE_TYPE_ALCOHOL:
+            builder.Prompts.text(session, 'Drinking can be a cause. How often does this happen?');
+            break;
+        case SOURCE_TYPE_DRUGS:
+            builder.Prompts.text(session, 'Drug use can be a cause. How often does this happen?');
+            break;
+        case SOURCE_TYPE_SMOKING:
+            builder.Prompts.text(session, 'Smoking can be a cause. How often does this happen?');
+            break;
+        case SOURCE_TYPE_DISEASE:
+            builder.Prompts.text(session, 'Are you currently on any medications? If yes, what ones?');
+            break;
+        case SOURCE_TYPE_STRESS:
+            builder.Prompts.text(session, 'Stress can impact performance. How often does this happen?');
+            break;
+        case SOURCE_TYPE_PRESCRIPTION:
+            builder.Prompts.text(session, 'Medication can be a cause. What medications are you currently taking?');
+            break;
+        default:
+            break;
     }
 };
 
@@ -41,8 +64,10 @@ const _handleActivity = (session) => {
     
     console.log(JSON.stringify(intake));
             
-    if (intake.activity == ACTIVITY_TYPE_SOLO) {
-        builder.Prompts.text(session, 'Some text?');
+    if (intake.activity === ACTIVITY_TYPE_SOLO) {
+        builder.Prompts.text(session, 'Solo text');
+    } else if (intake.activity === ACTIVITY_TYPE_PARTNER) {
+        builder.Prompts.text(session, 'Partner text');
     }
 };
 
@@ -111,14 +136,13 @@ const initializeIntake = (session, args, next) => {
         });
 
         _handleActivity(session);
-    });    
+    });
 };
 
 const intakeActivity = (session, results, next) => {
     let intake = session.dialogData.intake;
 
     if ( intake.activity ) {
-        
         intake.activityComment = results.response;
         
         intakeTable.addOrUpdateItem(intake, (error) => {
@@ -136,7 +160,7 @@ const intakeActivity = (session, results, next) => {
 const intakeSource = (session, results, next) => {
     let intake = session.dialogData.intake;
 
-    if ( intake.source ) {      
+    if ( intake.source ) {
         intake.sourceComment = results.response;
         
         intakeTable.addOrUpdateItem(intake, (error) => {

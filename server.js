@@ -18,10 +18,9 @@ bot.add('/', new builder.LuisDialog(luisModel)
     .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
 );
 
-bot.add('/Getting', 
+bot.add('/Getting',
     gettingDialog
 );
-
 
 bot.add('/Frequency', 
     frequencyDialog
