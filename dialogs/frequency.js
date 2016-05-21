@@ -10,8 +10,7 @@ const LUIS_ENTITY_SOURCE = 'borealis.source';
 const initializeOrder = (session, args, next) => {
     //save to state somehow
     
-    console.log(JSON.stringify(session));
-    
+    console.log(JSON.stringify(args));    
     session.send('Ok, thanks for that information.');
 };
 /* END: Intake */
