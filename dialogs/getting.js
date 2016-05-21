@@ -77,6 +77,8 @@ const initializeIntake = (session, args, next) => {
             conversationId: session.message.conversationId
         };
     }
+    
+    console.log(JSON.stringify(session));
          
     let intake = session.dialogData.intake;
     
