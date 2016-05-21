@@ -18,12 +18,6 @@ bot.add('/', new builder.LuisDialog(luisModel)
     .onDefault(builder.DialogAction.send("I'm sorry I didn't understand."))
 );
 
-//dialogs
-/*
-bot.add('/Maintaining', 
-    placeOrderInit
-);*/
-
 bot.add('/Getting', 
     gettingDialog
 );
