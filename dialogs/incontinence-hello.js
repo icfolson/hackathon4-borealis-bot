@@ -60,7 +60,7 @@ const determineGreeting = (userHello) =>
  * Modifies session.user.intake.name to hold the user's name if they provided one
  */
 const getResponseForUser = (session, entities) => {
-    dfd = q.defer();
+    const dfd = q.defer();
     const userHello = builder.EntityRecognizer.findEntity(entities, EntityTypes.LUIS_ENTITY_GREETING);
     const userName = builder.EntityRecognizer.findEntity(entities, EntityTypes.LUIS_ENTITY_NAME);
     
