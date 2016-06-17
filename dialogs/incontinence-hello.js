@@ -1,3 +1,5 @@
+'use strict';
+
 var async = require('async');
 var q = require('q');
 var builder = require('botbuilder');
