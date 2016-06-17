@@ -1,8 +1,9 @@
 'use strict';
 
-var async = require('async');
-var q = require('q');
-var builder = require('botbuilder');
+const async = require('async');
+const q = require('q');
+const builder = require('botbuilder');
+var generalMessages = require('../misc/general-messages');
 
 //------
 // LUIS Entity
@@ -14,12 +15,14 @@ const EntityTypes = {
 
 const EntityFlags = {
     NAME: false
-}
+};
 
-var prompt = builder.Prompts;
+const prompt = builder.Prompts;
 
+const doctorName = "Strong";
+const appointmentReason = "general physical";
 const commonGreeting = "I'm Luis"
-const commonQuestion = "Why don't you tell me a little bit about your incontinence?";
+const commonQuestion = `You've got an appointment scheduled tomorrow with Dr. ${doctorName}. Are you still able to make it?`;
 
 
 const potentialGreetings = [    { greeting: "what's up", 
@@ -77,7 +80,25 @@ const getResponseForUser = (session, entities) => {
 };
 
 /**
- * BEGIN: Greeting
+ * Creates an appointment confirmation string.
+ */
+const createAppointmentConfirmationStrings = (confirmed) => {
+    const responseArray = [];
+    if (confirmed) {
+        responseArray.push(generalMessages.AppointmentConfirmationMessages.positive);
+        responseArray.push(`Looks like you're coming in for a ${appointmentReason}.`);
+        responseArray.push(`We want to make sure you have time to cover any converns you may have.`);
+        responseArray.push(`There are a few topics that come up regularly in appointments like yours. You may not be` + 
+        ` experiencing any of the following, but I'll ask.`);
+    }
+    else {
+        responseArray.push(generalMessages.AppointmentConfirmationMessages.negative);
+    }
+    return responseArray;
+}
+
+/**
+ * BEGIN: Greeting Dialog
  */
 const greetingDialog = (session, args, next) => {
     if (!session.userData.intake) {
@@ -109,12 +130,28 @@ const processName = (session, results, next) => {
     if (results && results.response && !EntityFlags.NAME) {
         session.userData.intake.name = results.response;
         userName = results.response;
-        session.endDialog(`Hi, ${userName}. ${commonQuestion}`);
+        session.send(`Hi, ${userName}. ${commonQuestion}`);
     }
     else {
-        session.endDialog(`${botGreeting}, ${userName}. ${commonGreeting}. ${commonQuestion}`);
+        session.send(`${botGreeting}, ${userName}. ${commonGreeting}. ${commonQuestion}`);
     }
+    next();
 }
+
+const confirmAppointment = (session, results, next) => {
+        session.beginDialog('/confirm');
+}
+
+const processConfirmation = (session, results, next) => {
+    let confirmed = session.userData.intake.responseType;
+    console.log('here');
+};
+
+ 
+
+/**
+ * END Greeting Dialog
+ */
 
 /**
  * This hooks in to the next dialog
@@ -129,7 +166,7 @@ const processName = (session, results, next) => {
  * END: Greeting
  */
 
-module.exports = [greetingDialog, processName];
+module.exports = [greetingDialog, processName, confirmAppointment, processConfirmation];
 
 
 

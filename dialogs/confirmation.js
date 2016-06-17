@@ -1,0 +1,50 @@
+'use strict';
+
+/**
+ * Command dialog that does nothing but confirm various types of user input.
+ * 
+ * If a user enters a valid affirmative or negative input as matched by the regular
+ * expression below, the confirmation type will be stored in session.userData.intake.responseType
+ * as a boolean flag that the parent dialog can interpret to branch
+ * 
+ * To call this dialog from within another dialog, use session.beginDialog('/confirm'),
+ * as specified by the branch server.js
+ */
+
+/**
+ * Node modules
+ */
+var async = require('async');
+var q = require('q');
+var builder = require('botbuilder');
+const generalMessages = require('../misc/general-messages');
+
+const RegExps = {
+    AFFIRMATIVE : "yes|yeah|yerp|ya|yeh|yep|yessir|affirmative|correct",
+    NEGATIVE    : "no|nah|nay|nope|negative|not"
+};
+
+
+const confirmAffirmativeInput = (session) => {
+    console.log(`received positive input`);
+    session.userData.intake.responseType = true;
+    session.endDialog(`${generalMessages.ConfirmationMessages.confirmationThanks}`);
+};
+
+const confirmNegativeInput = (session) => {
+    console.log(`received negative input`);
+    session.userData.intake.responseType = false;
+    session.endDialog(`${generalMessages.ConfirmationMessages.confirmationThanks}`);
+};
+const begin = (session) => {
+    rconsole.log(`received blank input`);
+}
+
+const confirmationDialog = new builder.CommandDialog();
+confirmationDialog.matches(RegExps.AFFIRMATIVE, confirmAffirmativeInput);
+confirmationDialog.matches(RegExps.NEGATIVE, confirmNegativeInput);
+confirmationDialog.onDefault(builder.DialogAction.send(generalMessages.ConfirmationMessages.misunderstood));
+
+module.exports = {
+    confirmationDialog  : confirmationDialog
+};

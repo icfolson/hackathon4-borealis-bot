@@ -19,6 +19,7 @@ const LuisIntents = {
  */
 var incontinenceDialog = require('./dialogs/incontinence');
 var greetingDialog = require('./dialogs/incontinence-hello');
+var confirmation = require('./dialogs/confirmation');
 
 /**
  * LUIS and Bot related APIs
@@ -50,6 +51,7 @@ luisDialog.onDefault((session) => {
 
 bot.add('/greeting', greetingDialog);
 bot.add('/discover', incontinenceDialog);
+bot.add('/confirm', confirmation.confirmationDialog);
 
 /**
  * A session is the manager for the bot conversation with the user.
