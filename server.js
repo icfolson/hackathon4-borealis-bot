@@ -1,21 +1,43 @@
 'use strict';
 
+/**
+ * Node Modules
+ */
 var restify = require('restify');
 var builder = require('botbuilder');
 
-//import dialogs
-var gettingDialog = require('./dialogs/getting');
-var frequencyDialog = require('./dialogs/frequency');
+/**
+ * LUIS intents
+ */
+const LuisIntents = {
+    discover: "intent.discover",
+    greeting: "intent.greeting"
+}
 
-//load these values from the environment
-/*
-var luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=19d42dd0-96cd-47db-b2a2-259b679e5f45&subscription-key=f7e7b16408d64750ba8188fd25837887';
+/**
+ * Dialogs that are added to the bot builder
+ */
+var incontinenceDialog = require('./dialogs/incontinence');
+var greetingDialog = require('./dialogs/incontinence-hello');
+
+/**
+ * LUIS and Bot related APIs
+ */
+
+const luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=670912d3-f95e-4586-bb0b-7fd8c3d92010&subscription-key=f7e7b16408d64750ba8188fd25837887'
+var luisDialog = new builder.LuisDialog(luisModel);
 var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
 
-//root intent handler
-bot.add('/', new builder.LuisDialog(luisModel)
-    .on('borealis.getting', '/Getting')      
-    .onDefault((session) => {
+/**
+ * Adding the Luis dialog to the root directory.
+ */
+bot.add('/', luisDialog);
+
+luisDialog.on(LuisIntents.greeting, '/greeting');
+luisDialog.on(LuisIntents.discover, '/discover');
+
+
+luisDialog.onDefault((session) => {
         let currentConvoId = session.message.conversationId;
         
         if ( session.userData.intake ) {
@@ -24,26 +46,23 @@ bot.add('/', new builder.LuisDialog(luisModel)
         else {
             session.endDialog('I\'m sorry I didn\'t understand.' + currentConvoId);            
         }
-    })
-);
+    });
 
-bot.add('/Getting',
-    gettingDialog
-);*/
+bot.add('/greeting', greetingDialog);
+bot.add('/discover', incontinenceDialog);
 
-var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
+/**
+ * A session is the manager for the bot conversation with the user.
+ * Notable attributes:
+ * 
+ *      - dialogArgs    (optional arguments to pass to dialog when starting conversation)
+ *      - dialogData    (data that's only visible to the current dialog)
+ *      - dialogId      (id of dialog to start for any new conversations)
+ *      - dialogs       (sessions collection of available dialogs)
+ *      - message       (message received from the user)
+ *      - userData      (data for the user that's persisted across all conversations with the bot)
+ */
 
-var dialog = new builder.CommandDialog();
-
-bot.add('/', dialog);
-
-dialog.matches('.*hard$', [
-    (session) => {
-    builder.Prompts.text(session, 'Drinking can be a cause.  How often does his happen?');
-},
-(session, result) => {
-    session.send('Let’s chat more about this during your visit.')
-}]);
 
 // Setup Restify Server
 var server = restify.createServer();
