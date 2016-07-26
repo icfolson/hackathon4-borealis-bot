@@ -56,6 +56,7 @@ const confirmCause = (session, results, next) => {
     
     if (!!label && !!cause) {
         session.send(`${label} ${phrases.base}`);
+        next();
     }
     else {
         session.endDialog(`${phrases.misunderstood}`);
