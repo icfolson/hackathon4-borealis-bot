@@ -1,5 +1,3 @@
-'use strict';
-
 'use strict'
 
 var uuid = require('node-uuid');
@@ -8,7 +6,7 @@ var async = require('async');
 var q = require('q');
 
 /**
- * Attempts to collect any self medication the user may have tried
+ * Attempts to collect the cause of the incontinence
  */
 
 
@@ -26,24 +24,24 @@ labels: pain, anxiety,
 
 const luisConstants = require('../LUIS/entity-types');
 const synonymHash = require('../../data/synonym-hash');
-
+const keys = synonymHash.hashKeys;
 
 const phrases = {
-    base: `We'll make sure Dr. Strong has that information.`,
-    misunderstood: `Sorry, I don't understand.  Have you tried to treat your incontinence?  If so, with what?`,
-    next: `How often would you say you're experiencing your symptoms?`
+    misunderstood: `Sorry, I don't understand.  About how much urine would you say you lose during these experiences?`,
+    next: `Have you done or tried anything to relieve your symptoms?`,
+    [keys.sVolume]: `Though that's not necessarily anything to worry about, we'll still take note.`,
+    [keys.lVolume]: `I will definitely relate that information to your doctor for you.`
 };
 
-
 const endOfDialog = (session, next) => {
-    session.beginDialog('/');
+    session.endDialog(phrases.next);
 };
 
 
 /**
- * BEGIN: Self-medication dialog
+ * BEGIN: Frequency Dialog
  */
-const sMedDialog = (session, args, next) => {
+const volumeDialog = (session, args, next) => {
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
@@ -54,12 +52,10 @@ const sMedDialog = (session, args, next) => {
     console.log(`received entities:`, args.entities);
     console.log(`conversation id: ${session.message.address.conversation.id}`);
     console.log(`personId: ${session.message.address.user.id}`);
-    builder.EntityRecognizer.findEntity(entities, luisConstants.LUIS_ENTITY_TYPES.cause);
-    const label = getLabelSMed()
 
-    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.selfMedication)
-            .then(selfMed => {
-                session.userData.intake.selfMed = selfMed;
+    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.volume)
+            .then(volume => {
+                session.userData.intake.volume = volume;
                 next();
             });
     // getResponseForUser(session, args.entities).then(
@@ -77,21 +73,26 @@ const sMedDialog = (session, args, next) => {
     // );
 };
 
-const confirmSelfMedication = (session, results, next) => {
-    const selfMed = session.userData.intake.selfMed;
-    const label = synonymHash.containsValue(selfMed);
-    if (!!selfMed && !!label) {
-        session.send(`${phrases.base}`);
-        session.send(`${phrases.next}`);
+const confirmVolume= (session, results, next) => {
+    const volume = session.userData.intake.volume;
+    const label = synonymHash.containsValue(volume);
+    if (!!volume && !!label)
+    {
+        if (phrases[label]){
+            session.send(phrases[label]);
+        }
+        else {
+            session.send(phrases[keys.lVolume]);
+        }
+        next();
     }
     else {
-        session.send(`${phrases.misunderstood}`);
+        session.endDialog(`${phrases.misunderstood}`);
     }
-    next();     
 };
 
 module.exports = [
-    sMedDialog,
-    confirmSelfMedication,
+    volumeDialog,
+    confirmVolume,
     endOfDialog
 ];

@@ -9,7 +9,8 @@ const LUIS_ENTITY_TYPES = {
     selfMedication: 'incontinence.selfMedication',
     cause: 'incontinence.cause',
     frequency: 'incontinence.frequency',
-    symptoms: 'incontinence.symptoms'
+    symptoms: 'incontinence.symptoms',
+    volume: 'incontinence.volume'
 };
 
 
@@ -17,7 +18,8 @@ const LUIS_INTENTS = {
     cause: 'intent.cause',
     selfMedication: 'intent.selfMedication',
     frequency: 'intent.frequency',
-    symptoms: 'intent.symptoms'
+    symptoms: 'intent.symptoms',
+    volume: 'intent.volume'
 };
 
 const getEntityValue = (entities, type) => {

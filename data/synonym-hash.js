@@ -8,7 +8,9 @@ const hashKeys = {
     beverages: 'Drinking certain beverages ',
     smoking: 'Smoking',
     temperature: 'Temperature',
-    sleeping: 'Sleeping'
+    sleeping: 'Sleeping',
+    lVolume: 'largeVolume',
+    sVolume: 'smallVolume'
 };
 
 const synonymHash = {
@@ -19,7 +21,9 @@ const synonymHash = {
     [hashKeys.smoking]: ['marijuana', 'weed', 'heaters', 'darts', 'joints', 
         'mary jane', 'reefer', 'chron', 'chronic', 'pinners', 'cowboy killers', 'cigarettes', 'cigars', 'cubans', 'smoking'],
     [hashKeys.temperature]: ['hot', 'cold', 'warm', 'freezing', 'scolding'],
-    [hashKeys.sleeping]: ['bed', 'night', 'sleep', 'sleeping'] 
+    [hashKeys.sleeping]: ['bed', 'night', 'sleep', 'sleeping'],
+    [hashKeys.lVolume]: ['a lot', 'loads', 'tons', 'a bunch', 'too much'],
+    [hashKeys.sVolume]: ['a bit', 'not much', 'some', 'a little'] 
 };
 
 /**

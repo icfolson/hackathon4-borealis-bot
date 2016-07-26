@@ -42,7 +42,7 @@ const recursivePrompt = (num, numPrompts, session, next) => {
             break;
         session.send(prompts[`prompt${i}`]);
     }
-    builder.Prompts.text(session, prompts[`prompt${numPrompts-1}`]);
+   session.send(session, prompts[`prompt${numPrompts-1}`]);
     // if (num === numPrompts) {
     //     setTimeout(() => {
     //         return;
@@ -60,7 +60,8 @@ const recursivePrompt = (num, numPrompts, session, next) => {
  * Utility function to han
  */
 const promptUser = (session, args, next) => {
-    recursivePrompt(0, 6, session, next);
+    recursivePrompt(0, 6, session);
+    next();
 };
 
 const confirm = (session, results, next) => {
@@ -79,7 +80,7 @@ const processC  = (session, results, next) => {
 };
 
 const beginNext = (session, args, next) => {
-    session.beginDialog('/');
+    session.endDialog();
 }
 
 // branch off the dialog tree

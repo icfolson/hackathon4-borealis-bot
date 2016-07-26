@@ -147,7 +147,8 @@ const confirmAppointment = (session, results, next) => {
 const processConfirmation = (session, results, next) => {
     let confirmed = session.userData.intake.responseType;
     if (confirmed) {
-        session.beginDialog('/what');
+        session.endDialog();
+        session.replaceDialog('/what');
     }
     else
         session.endDialog(`Thank you for the information. I'll forward this to your doctor.`);

@@ -25,6 +25,7 @@ labels: pain, anxiety,
 
 const luisConstants = require('../LUIS/entity-types');
 const synonymHash = require('../../data/synonym-hash');
+const keys = synonymHash.hashKeys;
 
 const phrases = {
     misunderstood: `Sorry, I don't understand.  Are you experiencing any pain or discomfort having to do with incontinence?`,

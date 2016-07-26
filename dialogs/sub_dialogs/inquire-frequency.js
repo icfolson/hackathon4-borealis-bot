@@ -31,7 +31,7 @@ const phrases = {
 };
 
 const endOfDialog = (session, next) => {
-    session.beginDialog('/');
+    session.endDialog(phrases.next);
 };
 
 
@@ -73,13 +73,12 @@ const frequencyDialog = (session, args, next) => {
 const confirmFrequency = (session, results, next) => {
     if (!session.userData.intake.frequency)
     {
-        session.send(`${phrases.misunderstood}`);
+        session.endDialog(`${phrases.misunderstood}`);
     }
     else {
-        session.send(`You said ${session.userData.intake.frequency}`);
-        session.send(`${phrases.next}`);
+        next();
     }
-    next();
+
 }
 
 module.exports = [

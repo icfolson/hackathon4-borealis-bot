@@ -36,11 +36,10 @@ const confirmNegativeInput = (session) => {
 };
 
 
-const confirmationDialog = new builder.IntentDialog();
-
-confirmationDialog.matches(RegExps.AFFIRMATIVE, confirmAffirmativeInput);
-confirmationDialog.matches(RegExps.NEGATIVE, confirmNegativeInput);
-confirmationDialog.onDefault(() => {});
+const confirmationDialog = new builder.IntentDialog()
+.matches(RegExps.AFFIRMATIVE, confirmAffirmativeInput)
+.matches(RegExps.NEGATIVE, confirmNegativeInput)
+.onDefault(session => console.log(`misunderstood`));
 
 module.exports = {
     confirmationDialog  : confirmationDialog
