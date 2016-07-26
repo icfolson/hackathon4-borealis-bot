@@ -46,16 +46,7 @@ intents.matches(LuisIntents.discover, '/discover');
 intents.matches(luisConstants.LUIS_INTENTS.cause, '/cause');
 
 
-intents.onDefault((session) => {
-        let currentConvoId = session.message.conversationId;
-        
-        if ( session.userData.intake ) {
-            session.endDialog('Your intake convo id is ' + session.userData.intake.conversationId + ' and the current one is ' + session.message.conversationId);
-        }
-        else {
-            session.endDialog('I\'m sorry I didn\'t understand.' + currentConvoId);            
-        }
-    });
+intents.onDefault(() => {});
 
 // greets the user
 bot.dialog('/greeting', greetingDialog);
