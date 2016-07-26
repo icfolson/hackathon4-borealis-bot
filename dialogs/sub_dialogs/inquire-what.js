@@ -42,7 +42,7 @@ const recursivePrompt = (num, numPrompts, session, next) => {
             break;
         session.send(prompts[`prompt${i}`]);
     }
-   session.send(session, prompts[`prompt${numPrompts-1}`]);
+    session.send(prompts[`prompt${numPrompts-1}`]);
     // if (num === numPrompts) {
     //     setTimeout(() => {
     //         return;
