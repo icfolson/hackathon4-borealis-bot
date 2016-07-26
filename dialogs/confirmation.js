@@ -20,30 +20,27 @@ var builder = require('botbuilder');
 const generalMessages = require('../misc/general-messages');
 
 const RegExps = {
-    AFFIRMATIVE : "yes|yeah|yerp|ya|yeh|yep|yessir|affirmative|correct",
-    NEGATIVE    : "no|nah|nay|nope|negative|not"
+    AFFIRMATIVE : /\byes\b|\byeah\b|\byup\b|\byerp\b|\bya\b|\byeh\b|\byep\b|\byessir\b|\baffirmative\b|\bcorrect\b/i,
+    NEGATIVE    : /no|nah|nay|nope|negative|not/i
 };
 
 
-const confirmAffirmativeInput = (session) => {
-    console.log(`received positive input`);
-    session.userData.intake.responseType = true;
-    session.endDialog(`${generalMessages.ConfirmationMessages.confirmationThanks}`);
+const confirmAffirmativeInput = (session)  => {
+        session.userData.intake.responseType = true;
+        session.endDialog();
 };
 
 const confirmNegativeInput = (session) => {
-    console.log(`received negative input`);
     session.userData.intake.responseType = false;
-    session.endDialog(`${generalMessages.ConfirmationMessages.confirmationThanks}`);
+    session.endDialog();
 };
-const begin = (session) => {
-    rconsole.log(`received blank input`);
-}
 
-const confirmationDialog = new builder.CommandDialog();
+
+const confirmationDialog = new builder.IntentDialog();
+
 confirmationDialog.matches(RegExps.AFFIRMATIVE, confirmAffirmativeInput);
 confirmationDialog.matches(RegExps.NEGATIVE, confirmNegativeInput);
-confirmationDialog.onDefault(builder.DialogAction.send(generalMessages.ConfirmationMessages.misunderstood));
+confirmationDialog.onDefault(() => {});
 
 module.exports = {
     confirmationDialog  : confirmationDialog

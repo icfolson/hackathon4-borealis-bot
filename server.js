@@ -14,31 +14,39 @@ const LuisIntents = {
     greeting: "intent.greeting"
 }
 
+const luisConstants = require('./dialogs/LUIS/entity-types');
+
 /**
  * Dialogs that are added to the bot builder
  */
-var incontinenceDialog = require('./dialogs/incontinence');
-var greetingDialog = require('./dialogs/incontinence-hello');
-var confirmation = require('./dialogs/confirmation');
+const incontinenceDialog = require('./dialogs/incontinence');
+const greetingDialog = require('./dialogs/incontinence-hello');
+const confirmation = require('./dialogs/confirmation');
+const inquireWhat = require('./dialogs/sub_dialogs/inquire-what');
+const causeDialog = require('./dialogs/sub_dialogs/inquire-cause');
 
 /**
  * LUIS and Bot related APIs
  */
 
 const luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=670912d3-f95e-4586-bb0b-7fd8c3d92010&subscription-key=f7e7b16408d64750ba8188fd25837887'
-var luisDialog = new builder.LuisDialog(luisModel);
-var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
+var recognizer = new builder.LuisRecognizer(luisModel);
+var intents = new builder.IntentDialog({ recognizers: [recognizer] });
+const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
+//const connector = new builder.ConsoleConnector();
+var bot = new builder.UniversalBot(connector);
 
 /**
  * Adding the Luis dialog to the root directory.
  */
-bot.add('/', luisDialog);
+bot.dialog('/', intents);
 
-luisDialog.on(LuisIntents.greeting, '/greeting');
-luisDialog.on(LuisIntents.discover, '/discover');
+intents.matches(LuisIntents.greeting, '/greeting');
+intents.matches(LuisIntents.discover, '/discover');
+intents.matches(luisConstants.LUIS_INTENTS.cause, '/cause');
 
 
-luisDialog.onDefault((session) => {
+intents.onDefault((session) => {
         let currentConvoId = session.message.conversationId;
         
         if ( session.userData.intake ) {
@@ -49,9 +57,15 @@ luisDialog.onDefault((session) => {
         }
     });
 
-bot.add('/greeting', greetingDialog);
-bot.add('/discover', incontinenceDialog);
-bot.add('/confirm', confirmation.confirmationDialog);
+// greets the user
+bot.dialog('/greeting', greetingDialog);
+bot.dialog('/discover', incontinenceDialog);
+// confirms a simple yes or no answer
+bot.dialog('/confirmAppointment', confirmation.confirmationDialog);
+bot.dialog('/confirmIncontinence', confirmation.confirmationDialog);
+// inquires about the dialog
+bot.dialog(`/what`, inquireWhat);
+bot.dialog('/cause', causeDialog);
 
 /**
  * A session is the manager for the bot conversation with the user.
@@ -66,21 +80,15 @@ bot.add('/confirm', confirmation.confirmationDialog);
  */
 
 
-// Setup Restify Server
+// // Setup Restify Server
 var server = restify.createServer();
 
-// Setup the path for the botframework
-//server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
-//server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
-
-server.post('/api/messages', bot.listen());
-
-// Serve a static web page
-server.get(/.*/, restify.serveStatic({
-	'directory': '.',
-	'default': 'index.html'
-}));
+// // Setup the path for the botframework
+// //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
+// //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 
 server.listen(process.env.port || 3978, function () {
     console.log('%s listening to %s', server.name, server.url); 
 });
+
+ server.post('/api/messages', connector.listen());

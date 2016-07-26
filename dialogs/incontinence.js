@@ -42,7 +42,7 @@ const EntityFlags = {
 
 const EntityStorage = {
     incontinence    : "",
-    what            : "",
+    what            : "URINARY",
     emotion         : "",
     other           : ""
 };

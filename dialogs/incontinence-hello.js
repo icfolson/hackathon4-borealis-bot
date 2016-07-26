@@ -102,17 +102,19 @@ const createAppointmentConfirmationStrings = (confirmed) => {
  */
 const greetingDialog = (session, args, next) => {
     if (!session.userData.intake) {
+        const address = session.message;
         session.userData.intake = {
-            personId: session.message.from.id,
-            conversationId: session.message.conversationId
+            personId: session.message.address.user.id,
+            conversationId: session.message.address.conversation.id
         };
     }
     console.log(`received entities:`, args.entities);
-    console.log(`conversation id: ${session.message.from.id}`);
-    console.log(`personId: ${session.message.conversationId}`);
+    console.log(`conversation id: ${session.message.address.conversation.id}`);
+    console.log(`personId: ${session.message.address.user.id}`);
     getResponseForUser(session, args.entities).then(
         (botGreeting) => {
             session.userData.intake.greeting = botGreeting;
+            console.log(`botGreeting`, botGreeting);
             let userName = session.userData.intake.name;
             if (!EntityFlags.NAME) {
                 prompt.text(session, `${botGreeting}. ${commonGreeting}. What's your name?`);
@@ -139,12 +141,16 @@ const processName = (session, results, next) => {
 }
 
 const confirmAppointment = (session, results, next) => {
-        session.beginDialog('/confirm');
+    session.beginDialog('/confirmAppointment');
 }
 
 const processConfirmation = (session, results, next) => {
     let confirmed = session.userData.intake.responseType;
-    console.log('here');
+    if (confirmed) {
+        session.beginDialog('/what');
+    }
+    else
+        session.endDialog(`Thank you for the information. I'll forward this to your doctor.`);
 };
 
  
