@@ -32,9 +32,9 @@ const causeDialog = require('./dialogs/sub_dialogs/inquire-cause');
 const luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=670912d3-f95e-4586-bb0b-7fd8c3d92010&subscription-key=f7e7b16408d64750ba8188fd25837887'
 var recognizer = new builder.LuisRecognizer(luisModel);
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
-//const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
-const connector = new builder.ConsoleConnector();
-var bot = new builder.UniversalBot(connector.listen());
+const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
+//const connector = new builder.ConsoleConnector();
+var bot = new builder.UniversalBot(connector);
 
 /**
  * Adding the Luis dialog to the root directory.
@@ -87,8 +87,8 @@ var server = restify.createServer();
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 
-// server.listen(process.env.port || 3978, function () {
-//     console.log('%s listening to %s', server.name, server.url); 
-// });
+server.listen(process.env.port || 3978, function () {
+    console.log('%s listening to %s', server.name, server.url); 
+});
 
-//  server.post('/api/messages', connector.listen());
+ server.post('/api/messages', connector.listen());
