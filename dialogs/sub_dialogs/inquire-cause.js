@@ -60,7 +60,7 @@ const confirmCause = (session, results, next) => {
     let label = synonymHash.containsValue(cause);
     
     if (!!label && !!cause) {
-        session.send(`${label} ${phrases.base}`);
+        session.send(`${phrases[label]}`);
         next();
     }
     else {
