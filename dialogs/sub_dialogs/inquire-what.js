@@ -30,6 +30,10 @@ const prompts = {
     prompt5: `Have you had any recent or ongoing experience related to urinary incontinence?`
 };
 
+const phrases = {
+    next: 'Okay, tell me a little more about what you think might be causing it.'
+};
+
 const recursivePrompt = (num, numPrompts, session, next) => {
     for (let i= 0; i < numPrompts; i++)
     {
@@ -70,7 +74,7 @@ const processC  = (session, results, next) => {
         session.endDialog(`That is great to hear.  I'll forward this information to your doctor.`);
     }
     else {
-        session.send(`Okay, tell me a little more about it.`);
+        session.send(phrases.next);
     }
 };
 
