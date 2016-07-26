@@ -1,7 +1,4 @@
 'use strict';
-
-'use strict'
-
 var uuid = require('node-uuid');
 var builder = require('botbuilder');
 var async = require('async');

@@ -77,14 +77,14 @@ bot.dialog('/volume', volumeDialog);
 
 
 // // Setup Restify Server
-// var server = restify.createServer();
+ var server = restify.createServer();
 
 // // Setup the path for the botframework
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 
-// server.listen(process.env.port || 3978, function () {
-//     console.log('%s listening to %s', server.name, server.url); 
-// });
+server.listen(process.env.port || 3978, function () {
+    console.log('%s listening to %s', server.name, server.url); 
+});
 
-//  server.post('/api/messages', connector.listen());
+ server.post('/api/messages', connector.listen());
