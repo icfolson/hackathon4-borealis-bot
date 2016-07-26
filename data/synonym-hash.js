@@ -3,14 +3,16 @@
 
 const hashKeys = {
     urine: 'urine',
-    alcohol: 'alcohol',
-    laughing: 'laughing'
+    alcohol: 'Alcohol',
+    laughing: 'Laughing',
+    beverages: 'Drinking certain beverages '
 };
 
 const synonymHash = {
     [hashKeys.urine]: ['urine', 'pee', 'piss', 'leaks', 'incontinence', 'discharge', 'waste', 'secretion'],
     [hashKeys.alcohol]: ['whiskey', 'vodka', 'coke', 'rum', 'jameson', 'jaeger', 'beer', 'champagne', 'alcohol', 'hangover',
-        'hungover', 'absolute', 'drinking', 'smoking', 'smoke', 'drink', 'beers']
+        'hungover', 'absolute', 'drinking', 'smoking', 'smoke', 'drink', 'beers'],
+    [hashKeys.beverages]: ['drinking water', 'drink water', 'drink pop', 'drink soda', 'drinking soda', 'drinking pop']
 };
 
 /**
@@ -31,7 +33,7 @@ const containsValue = (value) => {
         const arrLength = arr.length;
         for(let i = 0; i < arrLength; i++) {
             if (arr[i] === value) {
-                foundKey = keys[j]; // finds the associated key int he hash 
+                foundKey = keys[j]; // finds the associated key with a value in the hash
             }
         }
         if (foundKey)

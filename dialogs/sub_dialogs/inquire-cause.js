@@ -42,7 +42,7 @@ const causeDialog = (session, args, next) => {
             conversationId: address.conversation.id
         };
     }
-    console.log(`received entities:`, args.entities);
+    //console.log(`received entities:`, args.entities);
     luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.cause)
             .then(cause => {
                 session.userData.intake.cause = cause;
@@ -57,7 +57,6 @@ const confirmCause = (session, results, next) => {
     if (!!label && !!cause) {
         session.send(`${label} ${phrases.base}`);
         session.send(`${next}`);
-        next();
     }
     else {
         session.endDialog(`${phrases.misunderstood}`);
