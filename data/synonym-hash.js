@@ -5,14 +5,17 @@ const hashKeys = {
     urine: 'urine',
     alcohol: 'Alcohol',
     laughing: 'Laughing',
-    beverages: 'Drinking certain beverages '
+    beverages: 'Drinking certain beverages ',
+    smoking: 'Smoking'
 };
 
 const synonymHash = {
     [hashKeys.urine]: ['urine', 'pee', 'piss', 'leaks', 'incontinence', 'discharge', 'waste', 'secretion'],
     [hashKeys.alcohol]: ['whiskey', 'vodka', 'coke', 'rum', 'jameson', 'jaeger', 'beer', 'champagne', 'alcohol', 'hangover',
         'hungover', 'absolute', 'drinking', 'smoking', 'smoke', 'drink', 'beers'],
-    [hashKeys.beverages]: ['drinking water', 'drink water', 'drink pop', 'drink soda', 'drinking soda', 'drinking pop']
+    [hashKeys.beverages]: ['drinking water', 'drink water', 'drink pop', 'drink soda', 'drinking soda', 'drinking pop'],
+    [hashKeys.smoking]: ['marijuana', 'weed', 'heaters', 'darts', 'joints', 
+        'mary jane', 'reefer', 'chron', 'chronic', 'pinners', 'cowboy killers', 'cigarettes', 'cigars', 'cubans', 'smoking'] 
 };
 
 /**
