@@ -17,6 +17,7 @@ var q = require('q');
 
 const luisConstants = require('../LUIS/entity-types');
 const synonymHash = require('../../data/synonym-hash');
+const keys = synonymHash.hashKeys;
 
 /**
  * End of dialog
@@ -26,9 +27,13 @@ const endOfDialog = (session, next) => {
 };
 
 const phrases = {
-    base: `may be a cause.`,
     misunderstood: `Sorry, I don't understand.  What do you think may be causing your incontinence?`,
-    next: `About how much leakage are you experiencing when this happens? Just a little bit, or a noticeable amount?`
+    next: `About how much leakage are you experiencing when this happens? Just a little bit, or a noticeable amount?`,
+    [keys.sleeping]: `These things sometimes happen when we sleep.`,
+    [keys.alcohol]: `Alcohol can play a major role in urinary incontinence`,
+    [keys.beverages]: `Often times beverages can play a role in urinary incontinence`,
+    [keys.smoking]: 'Smoking can play a major role in urinary incontinence',
+    [keys.temperature]: `How our body responds to temperature can directly impact out ability to hold our bladder.`
 };
 
 /**
