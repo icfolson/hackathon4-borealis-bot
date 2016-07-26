@@ -76,6 +76,7 @@ const confirmFrequency = (session, results, next) => {
         session.send(`${phrases.misunderstood}`);
     }
     else {
+        session.send(`You said ${session.userData.intake.frequency}`);
         session.send(`${phrases.next}`);
     }
     next();
