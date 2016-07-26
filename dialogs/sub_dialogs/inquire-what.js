@@ -61,6 +61,7 @@ const recursivePrompt = (num, numPrompts, session, next) => {
  */
 const promptUser = (session, args, next) => {
     recursivePrompt(0, 6, session);
+    next();
 };
 
 const confirm = (session, results, next) => {
