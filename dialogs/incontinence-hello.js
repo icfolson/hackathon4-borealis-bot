@@ -54,7 +54,7 @@ const determineGreeting = (userHello) =>
             response = potentialGreetings[i].response;
             break;
         }
-    response  = response || `Hello, ${commonGreeting}`;
+    response  = response || `Hello`;
     return response;
 };
 
@@ -142,7 +142,7 @@ const greetingDialog = (session, results, next) => {
             console.log(`botGreeting`, botGreeting);
             let userName = session.userData.intake.name;
             if (!EntityFlags.NAME) {
-                prompt.text(session, `${botGreeting}. ${commonGreeting}. What's your name?`);
+                prompt.text(session, `${botGreeting}, ${commonGreeting}. What's your name?`);
             }
             else {
                 next(session);
