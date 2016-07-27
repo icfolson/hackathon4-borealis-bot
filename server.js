@@ -26,6 +26,7 @@ const inquireWhat = require('./dialogs/sub_dialogs/inquire-what');
 const causeDialog = require('./dialogs/sub_dialogs/inquire-cause');
 const frequencyDialog = require('./dialogs/sub_dialogs/inquire-frequency');
 const volumeDialog = require('./dialogs/sub_dialogs/inquire-volume');
+const medicationDialog = require('.dialogs/sub_dialogs/inquire-self-medication');
 
 /**
  * LUIS and Bot related APIs
@@ -47,6 +48,7 @@ intents.matches(LuisIntents.discover, '/discover');
 intents.matches(luisConstants.LUIS_INTENTS.frequency, '/frequency');
 intents.matches(luisConstants.LUIS_INTENTS.cause, '/cause');
 intents.matches(luisConstants.LUIS_INTENTS.volume, '/volume');
+intents.matches(luisConstants.LUIS_INTENTS.selfMedication, '/selfMedication');
 
 
 intents.onDefault(() => {});
@@ -62,6 +64,7 @@ bot.dialog(`/what`, inquireWhat);
 bot.dialog('/cause', causeDialog);
 bot.dialog('/frequency', frequencyDialog);
 bot.dialog('/volume', volumeDialog);
+bot.dialog('/selfMedicaiton', medicationDialog);
 
 /**
  * A session is the manager for the bot conversation with the user.
