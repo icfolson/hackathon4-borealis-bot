@@ -36,7 +36,7 @@ const phrases = {
 
 
 const endOfDialog = (session, next) => {
-    session.beginDialog('/');
+    session.endDialog(phrases.next);
 };
 
 
@@ -54,9 +54,6 @@ const sMedDialog = (session, args, next) => {
     console.log(`received entities:`, args.entities);
     console.log(`conversation id: ${session.message.address.conversation.id}`);
     console.log(`personId: ${session.message.address.user.id}`);
-    builder.EntityRecognizer.findEntity(entities, luisConstants.LUIS_ENTITY_TYPES.cause);
-    const label = getLabelSMed()
-
     luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.selfMedication)
             .then(selfMed => {
                 session.userData.intake.selfMed = selfMed;
