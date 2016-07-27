@@ -97,10 +97,7 @@ const createAppointmentConfirmationStrings = (confirmed) => {
     return responseArray;
 }
 
-/**
- * BEGIN: Greeting Dialog
- */
-const greetingDialog = (session, args, next) => {
+const begin = (session, args, next) => {
     if (!session.userData.flags) {
         session.userData.flags = {
             greeting: false,
@@ -123,6 +120,12 @@ const greetingDialog = (session, args, next) => {
             conversationId: session.message.address.conversation.id
         };
     }
+}
+
+/**
+ * BEGIN: Greeting Dialog
+ */
+const greetingDialog = (session, results, next) => {
     console.log(`received entities:`, args.entities);
     console.log(`conversation id: ${session.message.address.conversation.id}`);
     console.log(`personId: ${session.message.address.user.id}`);
@@ -188,7 +191,7 @@ const processConfirmation = (session, results, next) => {
  * END: Greeting
  */
 
-module.exports = [greetingDialog, processName, confirmAppointment, processConfirmation];
+module.exports = [begin, greetingDialog, processName, confirmAppointment, processConfirmation];
 
 
 
