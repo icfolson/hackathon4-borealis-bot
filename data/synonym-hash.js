@@ -26,7 +26,7 @@ const synonymHash = {
     [hashKeys.sleeping]: ['bed', 'night', 'sleep', 'sleeping'],
     [hashKeys.lVolume]: ['a lot', 'loads', 'tons', 'a bunch', 'too much'],
     [hashKeys.sVolume]: ['a bit', 'not much', 'some', 'a little'],
-    [hashKeys.pads]: ['maxi pads', 'poise pads', 'depends', 'diapers'],
+    [hashKeys.pads]: ['maxi pads', 'poise pads', 'depends', 'diapers', 'pads'],
     [hashKeys.pills]: ['oxy', 'oxycontin', 'painkillers', 'pills', 'percocet']
 };
 
