@@ -70,7 +70,7 @@ const volumeDialog = (session, results, next) => {
 const confirmVolume= (session, results, next) => {
     const volume = session.userData.intake.volume;
     const label = synonymHash.containsValue(volume);
-    if (!!volume && !!label)
+    if (!!volume)
     {
         if (phrases[label]){
             session.send(phrases[label]);
