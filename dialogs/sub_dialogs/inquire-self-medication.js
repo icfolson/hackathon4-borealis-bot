@@ -23,12 +23,15 @@ labels: pain, anxiety,
 
 const luisConstants = require('../LUIS/entity-types');
 const synonymHash = require('../../data/synonym-hash');
+const keys = synonymHash.hashKeys;
 
 
 const phrases = {
     base: `We'll make sure Dr. Strong has that information.`,
     misunderstood: `Sorry, I don't understand.  Have you tried to treat your incontinence?  If so, with what?`,
-    next: `How often would you say you're experiencing your symptoms?`
+    next: `How often would you say you're experiencing your symptoms?`,
+    [keys.pads]: `Using pads and diapers to counteract the effects of incontinence is perfectly reasonable.  We'll let your doctor know.`,
+    [keys.pills]: `It's best to use caution when self medicating, especially with drugs. We'll relay this information to Dr. Strong.`
 };
 
 
@@ -78,13 +81,15 @@ const confirmSelfMedication = (session, results, next) => {
     const selfMed = session.userData.intake.selfMed;
     const label = synonymHash.containsValue(selfMed);
     if (!!selfMed && !!label) {
-        session.send(`${phrases.base}`);
-        session.send(`${phrases.next}`);
+        if (phrases[label])
+            session.send(phrases[label]);
+        else
+            session.send(phrases.base);
+        next();
     }
     else {
-        session.send(`${phrases.misunderstood}`);
-    }
-    next();     
+        session.endDialog(phrases.misunderstood);
+    } 
 };
 
 module.exports = [

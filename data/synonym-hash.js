@@ -10,7 +10,9 @@ const hashKeys = {
     temperature: 'Temperature',
     sleeping: 'Sleeping',
     lVolume: 'largeVolume',
-    sVolume: 'smallVolume'
+    sVolume: 'smallVolume',
+    pads: `Pads`,
+    pills: 'Pills'
 };
 
 const synonymHash = {
@@ -23,7 +25,9 @@ const synonymHash = {
     [hashKeys.temperature]: ['hot', 'cold', 'warm', 'freezing', 'scolding'],
     [hashKeys.sleeping]: ['bed', 'night', 'sleep', 'sleeping'],
     [hashKeys.lVolume]: ['a lot', 'loads', 'tons', 'a bunch', 'too much'],
-    [hashKeys.sVolume]: ['a bit', 'not much', 'some', 'a little'] 
+    [hashKeys.sVolume]: ['a bit', 'not much', 'some', 'a little'],
+    [hashKeys.pads]: ['maxi pads', 'poise pads', 'depends', 'diapers'],
+    [hashKeys.pills]: ['oxy', 'oxycontin', 'painkillers', 'pills', 'percocet']
 };
 
 /**
