@@ -26,7 +26,7 @@ const inquireWhat = require('./dialogs/sub_dialogs/inquire-what');
 const causeDialog = require('./dialogs/sub_dialogs/inquire-cause');
 const frequencyDialog = require('./dialogs/sub_dialogs/inquire-frequency');
 const volumeDialog = require('./dialogs/sub_dialogs/inquire-volume');
-const medicationDialog = require('.dialogs/sub_dialogs/inquire-self-medication');
+const medicationDialog = require('./dialogs/sub_dialogs/inquire-self-medication');
 
 /**
  * LUIS and Bot related APIs
