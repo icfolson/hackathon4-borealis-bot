@@ -34,9 +34,14 @@ const medicationDialog = require('./dialogs/sub_dialogs/inquire-self-medication'
 const luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=670912d3-f95e-4586-bb0b-7fd8c3d92010&subscription-key=f7e7b16408d64750ba8188fd25837887'
 var recognizer = new builder.LuisRecognizer(luisModel);
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
-const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
+// uncomment connector a bot below to 
 //const connector = new builder.ConsoleConnector();
+//var bot = new builder.UniversalBox(connector.listen();)
+
+// Restify connector/bot
+const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
 var bot = new builder.UniversalBot(connector);
+
 
 /**
  * Adding the Luis dialog to the root directory.
@@ -64,7 +69,7 @@ bot.dialog(`/what`, inquireWhat);
 bot.dialog('/cause', causeDialog);
 bot.dialog('/frequency', frequencyDialog);
 bot.dialog('/volume', volumeDialog);
-bot.dialog('/selfMedicaiton', medicationDialog);
+bot.dialog('/selfMedication', medicationDialog);
 
 /**
  * A session is the manager for the bot conversation with the user.
