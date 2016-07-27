@@ -34,14 +34,24 @@ const phrases = {
 };
 
 const endOfDialog = (session, next) => {
+    session.userData.flags.volume = false;
+    session.userData.flags.selfMedication = true;
     session.endDialog(phrases.next);
 };
 
-
+const begin = (session, args, next) => {
+    if (!session.userData.flags.volume) {
+        endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
+    }
+    else {
+        session.userData.entities = args.entities;
+        next();
+    }
+}
 /**
  * BEGIN: Frequency Dialog
  */
-const volumeDialog = (session, args, next) => {
+const volumeDialog = (session, results, next) => {
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
@@ -49,28 +59,12 @@ const volumeDialog = (session, args, next) => {
             conversationId: session.message.address.conversation.id
         };
     }
-    console.log(`received entities:`, args.entities);
-    console.log(`conversation id: ${session.message.address.conversation.id}`);
-    console.log(`personId: ${session.message.address.user.id}`);
 
-    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.volume)
+    luisConstants.getEntityValue(session.userData.entities, luisConstants.LUIS_ENTITY_TYPES.volume)
             .then(volume => {
                 session.userData.intake.volume = volume;
                 next();
             });
-    // getResponseForUser(session, args.entities).then(
-    //     (botGreeting) => {
-    //         session.userData.intake.greeting = botGreeting;
-    //         console.log(`botGreeting`, botGreeting);
-    //         let userName = session.userData.intake.name;
-    //         if (!EntityFlags.NAME) {
-    //             prompt.text(session, `${botGreeting}. ${commonGreeting}. What's your name?`);
-    //         }
-    //         else {
-    //             next(session);
-    //         }
-    //     }
-    // );
 };
 
 const confirmVolume= (session, results, next) => {
@@ -92,6 +86,7 @@ const confirmVolume= (session, results, next) => {
 };
 
 module.exports = [
+    begin,
     volumeDialog,
     confirmVolume,
     endOfDialog

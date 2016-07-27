@@ -23,6 +23,9 @@ const keys = synonymHash.hashKeys;
  * End of dialog
  */
 const endOfDialog = (session, next) => {
+    session.userData.flags.cause = false;
+    session.userData.flags.volume = true; // set next stage of conversation
+    session.userData.nextPhrase = `How much liquid do you think you lose when you experience incontinence?`;
     session.endDialog(phrases.next);
 };
 
@@ -33,14 +36,31 @@ const phrases = {
     [keys.alcohol]: `Alcohol can play a major role in urinary incontinence`,
     [keys.beverages]: `Often times beverages can play a role in urinary incontinence`,
     [keys.smoking]: 'Smoking can play a major role in urinary incontinence',
-    [keys.temperature]: `How our body responds to temperature can directly impact out ability to hold our bladder.`
+    [keys.temperature]: `How our body responds to temperature can directly impact out ability to hold our bladder.`,
+    alternate: `This could be a probable cause.  We'll send the info to your doctor.`
 };
+
+const altPhrases = {
+    [keys.sleeping]: `As I mentioned before, ${phrases[keys.sleeping]}`
+}
 
 /**
  * BEGIN: Cause Dialog
  */
-const causeDialog = (session, args, next) => {
+
+const begin = (session, args, next) => {
+    if (!session.userData.flags.cause){
+        session.endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
+    }
+    else {
+        session.userData.entities = args.entities;
+        next();
+    }
+}
+
+const causeDialog = (session, results, next) => {
     if (!session.userData.intake) {
+        console.log(`here`);
         const address = session.message.address;
         session.userData.intake = {
             personId: address.user.id,
@@ -48,7 +68,7 @@ const causeDialog = (session, args, next) => {
         };
     }
     //console.log(`received entities:`, args.entities);
-    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.cause)
+    luisConstants.getEntityValue(session.userData.entities, luisConstants.LUIS_ENTITY_TYPES.cause)
             .then(cause => {
                 session.userData.intake.cause = cause;
                 next();
@@ -69,6 +89,7 @@ const confirmCause = (session, results, next) => {
 }
 
 module.exports = [
+    begin,
     causeDialog,
     confirmCause,
     endOfDialog

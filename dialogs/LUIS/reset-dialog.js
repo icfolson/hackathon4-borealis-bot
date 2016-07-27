@@ -1,16 +1,15 @@
 'use strict';
 
 const reset = (session, args, next) => {
-    if (session.userData.flags){
-        const flags = session.userData.flags;
-        flags.greeting = false;
+    session.userData.flags = {};
+    const flags = session.userData.flags;
+        flags.greeting = true;
         flags.what = false;
         flags.volume = false;
         flags.symptoms = false;
-        flags.selfMeds = false;
+        flags.selfMedication = false;
         flags.frequency = false;
         flags.cause = false;
-    };
     session.endDialog(`The dialog has been reset.`);
 };
 

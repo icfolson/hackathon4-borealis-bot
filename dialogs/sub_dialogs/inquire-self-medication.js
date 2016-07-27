@@ -36,14 +36,26 @@ const phrases = {
 
 
 const endOfDialog = (session, next) => {
+    session.userData.flags.selfMedication = false;
+    session.userData.flags.frequency = true;
     session.endDialog(phrases.next);
 };
+
+const begin = (session, args, next) => {
+    if (!session.userData.flags.selfMedication) {
+        endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
+    }
+    else {
+        session.userData.entities = args.entities;
+        next();
+    }    
+}
 
 
 /**
  * BEGIN: Self-medication dialog
  */
-const sMedDialog = (session, args, next) => {
+const sMedDialog = (session, results, next) => {
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
@@ -51,27 +63,11 @@ const sMedDialog = (session, args, next) => {
             conversationId: session.message.address.conversation.id
         };
     }
-    console.log(`received entities:`, args.entities);
-    console.log(`conversation id: ${session.message.address.conversation.id}`);
-    console.log(`personId: ${session.message.address.user.id}`);
-    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.selfMedication)
+    luisConstants.getEntityValue(session.userData.entities, luisConstants.LUIS_ENTITY_TYPES.selfMedication)
             .then(selfMed => {
                 session.userData.intake.selfMed = selfMed;
                 next();
             });
-    // getResponseForUser(session, args.entities).then(
-    //     (botGreeting) => {
-    //         session.userData.intake.greeting = botGreeting;
-    //         console.log(`botGreeting`, botGreeting);
-    //         let userName = session.userData.intake.name;
-    //         if (!EntityFlags.NAME) {
-    //             prompt.text(session, `${botGreeting}. ${commonGreeting}. What's your name?`);
-    //         }
-    //         else {
-    //             next(session);
-    //         }
-    //     }
-    // );
 };
 
 const confirmSelfMedication = (session, results, next) => {
@@ -90,6 +86,7 @@ const confirmSelfMedication = (session, results, next) => {
 };
 
 module.exports = [
+    begin,
     sMedDialog,
     confirmSelfMedication,
     endOfDialog

@@ -27,18 +27,28 @@ const synonymHash = require('../../data/synonym-hash');
 
 const phrases = {
     misunderstood: `Sorry, I don't understand.  About how often would you say you experience incontinence?`,
-    next: `Do you experience any pain or severe discomfort when it's happening?`
+    next: `Okay, this is very helpful information.  We’ll make sure to follow up during your appointment.`
 };
 
 const endOfDialog = (session, next) => {
+    session.userData.flags.frequency = false;
     session.endDialog(phrases.next);
 };
 
+const begin = (session, args, next) => {
+    if (!session.userData.flags.frequency) {
+        endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
+    }
+    else {
+        session.userData.entities = args.entities;
+        next();
+    }    
+}
 
 /**
  * BEGIN: Frequency Dialog
  */
-const frequencyDialog = (session, args, next) => {
+const frequencyDialog = (session, results, next) => {
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
@@ -46,11 +56,8 @@ const frequencyDialog = (session, args, next) => {
             conversationId: session.message.address.conversation.id
         };
     }
-    console.log(`received entities:`, args.entities);
-    console.log(`conversation id: ${session.message.address.conversation.id}`);
-    console.log(`personId: ${session.message.address.user.id}`);
 
-    luisConstants.getEntityValue(args.entities, luisConstants.LUIS_ENTITY_TYPES.frequency)
+    luisConstants.getEntityValue(session.userData.entities, luisConstants.LUIS_ENTITY_TYPES.frequency)
             .then(freq => {
                 session.userData.intake.frequency = freq;
                 next();
@@ -82,6 +89,7 @@ const confirmFrequency = (session, results, next) => {
 }
 
 module.exports = [
+    begin,
     frequencyDialog,
     confirmFrequency,
     endOfDialog

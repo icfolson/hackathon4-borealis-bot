@@ -31,8 +31,30 @@ const getEntityValue = (entities, type) => {
     return dfd.promise;
 }
 
+const getPhraseBasedOnFlag = (flags) => {
+    if (flags.greeting) {
+        return `We should probably greet each other before getting into that.`;
+    }
+    else if (flags.cause) {
+        return `Before getting into that, why don't you tell me what you think is causing your incontinence?`;
+    }
+    else if (flags.volume) {
+        return `Let's hold off on that information for a moment.  How much fluid do you feel you lose during bouts of incontinence?`
+    }
+    else if (flags.selfMedication) {
+        return `Before we talk more about that, would you mind telling me more about how you relieve your symptoms, if at all?`
+    }
+    else if (flags.frequency) {
+        return `Before moving onto that subject, would you please describe how often your incontinence occurs?`
+    }
+    else {
+        return `This dialog has finished and needs to be reset for another client.  Type \"reset luis dialog\" to reset.`
+    };
+};
+
 module.exports = {
     LUIS_ENTITY_TYPES,
     LUIS_INTENTS,
-    getEntityValue
+    getEntityValue,
+    getPhraseBasedOnFlag
 };

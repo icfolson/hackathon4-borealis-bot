@@ -109,10 +109,8 @@ const begin = (session, args, next) => {
             cause: false
         };
     };
-    if (session.userData.flags.greeting) {
-        session.endDialog(`We've met before, haven't we?`); // end dialog if it's been done
-    };
-    session.userData.flags.greeting = true; // set the flag
+
+
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
@@ -120,16 +118,25 @@ const begin = (session, args, next) => {
             conversationId: session.message.address.conversation.id
         };
     }
+    // just say something clever and move on if the user is fucking with us.
+    if (!session.userData.flags.greeting) {
+        session.send(`Hello again, ${session.userData.intake.name}.  We met not too long ago, if I remember correctly.`);
+        session.endDialog(`${session.userData.nextPhrase}` ); // end dialog if it's been done
+    }
+    else {
+        session.userData.entities = args.entities;
+        next();
+    }
 }
 
 /**
  * BEGIN: Greeting Dialog
  */
 const greetingDialog = (session, results, next) => {
-    console.log(`received entities:`, args.entities);
+    console.log(`received entities:`, session.userData.entities);
     console.log(`conversation id: ${session.message.address.conversation.id}`);
     console.log(`personId: ${session.message.address.user.id}`);
-    getResponseForUser(session, args.entities).then(
+    getResponseForUser(session, session.userData.entities).then(
         (botGreeting) => {
             session.userData.intake.greeting = botGreeting;
             console.log(`botGreeting`, botGreeting);

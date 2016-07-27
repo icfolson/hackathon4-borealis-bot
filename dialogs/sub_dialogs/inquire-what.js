@@ -74,6 +74,9 @@ const processC  = (session, results, next) => {
         session.endDialog(`That is great to hear.  I'll forward this information to your doctor.`);
     }
     else {
+        session.userData.nextPhrase = 'You mentioned you were having incontinence?  What do you think is causing it?';
+        session.userData.flags.greeting = false; // set the flag
+        session.userData.flags.cause = true; // go to cause dialog
         session.send(phrases.next);
     }
 };

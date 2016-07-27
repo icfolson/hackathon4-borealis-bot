@@ -27,7 +27,7 @@ const causeDialog = require('./dialogs/sub_dialogs/inquire-cause');
 const frequencyDialog = require('./dialogs/sub_dialogs/inquire-frequency');
 const volumeDialog = require('./dialogs/sub_dialogs/inquire-volume');
 const medicationDialog = require('./dialogs/sub_dialogs/inquire-self-medication');
-const resetDialog = require('./luis/reset-dialog');
+const resetDialog = require('./dialogs/luis/reset-dialog');
 
 /**
  * LUIS and Bot related APIs
@@ -36,8 +36,8 @@ const luisModel = 'https://api.projectoxford.ai/luis/v1/application?id=670912d3-
 var recognizer = new builder.LuisRecognizer(luisModel);
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 // uncomment connector a bot below to 
-//const connector = new builder.ConsoleConnector();
-//var bot = new builder.UniversalBox(connector.listen();)
+// const connector = new builder.ConsoleConnector();
+// var bot = new builder.UniversalBot(connector.listen());
 
 // Restify connector/bot
 const connector = new builder.ChatConnector({appId: process.env.APP_ID, appPassword: process.env.APP_PASSWORD });
