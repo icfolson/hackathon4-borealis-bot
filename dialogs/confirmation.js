@@ -20,7 +20,7 @@ var builder = require('botbuilder');
 const generalMessages = require('../misc/general-messages');
 
 const RegExps = {
-    AFFIRMATIVE : /\byes\b|\byeah\b|\byup\b|\byerp\b|\bya\b|\byeh\b|\byep\b|\byessir\b|\baffirmative\b|\bcorrect\b/i,
+    AFFIRMATIVE : /yes|yeah|yup|yerp|ya|yeh|yep|yessir|affirmative|correct|sure|I think so/i,
     NEGATIVE    : /no|nah|nay|nope|negative|not/i
 };
 
