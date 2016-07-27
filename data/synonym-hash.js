@@ -17,7 +17,7 @@ const synonymHash = {
     [hashKeys.urine]: ['urine', 'pee', 'piss', 'leaks', 'incontinence', 'discharge', 'waste', 'secretion'],
     [hashKeys.alcohol]: ['whiskey', 'vodka', 'coke', 'rum', 'jameson', 'jaeger', 'beer', 'champagne', 'alcohol', 'hangover',
         'hungover', 'absolute', 'drinking', 'smoking', 'smoke', 'drink', 'beers'],
-    [hashKeys.beverages]: ['drink water', 'drink water', 'drink pop', 'drink soda', 'drinking soda', 'drinking pop'],
+    [hashKeys.beverages]: ['drink water', 'drink water', 'drink pop', 'drink soda', 'drinking soda', 'drinking pop', 'water', 'pop', 'tea', 'soda'],
     [hashKeys.smoking]: ['marijuana', 'weed', 'heaters', 'darts', 'joints', 
         'mary jane', 'reefer', 'chron', 'chronic', 'pinners', 'cowboy killers', 'cigarettes', 'cigars', 'cubans', 'smoking'],
     [hashKeys.temperature]: ['hot', 'cold', 'warm', 'freezing', 'scolding'],
