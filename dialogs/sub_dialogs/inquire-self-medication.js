@@ -43,7 +43,7 @@ const endOfDialog = (session, next) => {
 
 const begin = (session, args, next) => {
     if (!session.userData.flags.selfMedication) {
-        endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
+        session.endDialog(luisConstants.getPhraseBasedOnFlag(session.userData.flags));
     }
     else {
         session.userData.entities = args.entities;

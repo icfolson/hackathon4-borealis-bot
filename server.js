@@ -56,6 +56,8 @@ intents.matches(luisConstants.LUIS_INTENTS.cause, '/cause');
 intents.matches(luisConstants.LUIS_INTENTS.volume, '/volume');
 intents.matches(luisConstants.LUIS_INTENTS.selfMedication, '/selfMedication');
 intents.matches(luisConstants.LUIS_INTENTS.reset, '/reset');
+intents.onDefault(session => {builder.DialogAction.send(`I'm sorry. I didn't understand.  Maybe with more training I will, though!`)});
+
 
 
 intents.onDefault(() => {});
@@ -88,9 +90,9 @@ bot.dialog('/reset', resetDialog);
 
 
 // // Setup Restify Server
- var server = restify.createServer();
+var server = restify.createServer();
 
-// // Setup the path for the botframework
+// // Setup the path for the botframeworka
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 // //server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 
