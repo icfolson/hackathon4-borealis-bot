@@ -19,7 +19,8 @@ const LUIS_INTENTS = {
     selfMedication: 'intent.selfMedication',
     frequency: 'intent.frequency',
     symptoms: 'intent.symptoms',
-    volume: 'intent.volume'
+    volume: 'intent.volume',
+    reset: 'intent.reset'
 };
 
 const getEntityValue = (entities, type) => {

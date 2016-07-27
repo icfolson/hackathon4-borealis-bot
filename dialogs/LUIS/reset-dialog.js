@@ -11,7 +11,7 @@ const reset = (session, args, next) => {
         flags.frequency = false;
         flags.cause = false;
     };
-    session.endDialog(`Dialog reset`);
+    session.endDialog(`The dialog has been reset.`);
 };
 
 module.exports = [reset];
