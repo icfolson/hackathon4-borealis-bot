@@ -113,7 +113,7 @@ const greetingDialog = (session, args, next) => {
         };
     };
     if (session.userData.flags.greeting) {
-        endDialog(`We've met before, haven't we?`); // end dialog if it's been done
+        session.endDialog(`We've met before, haven't we?`); // end dialog if it's been done
     };
     session.userData.flags.greeting = true; // set the flag
     if (!session.userData.intake) {
