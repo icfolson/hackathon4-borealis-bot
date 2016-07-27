@@ -27,7 +27,7 @@ const synonymHash = require('../../data/synonym-hash');
 
 const phrases = {
     misunderstood: `Sorry, I don't understand.  About how often would you say you experience incontinence?`,
-    next: `Do you experience any pain or severe discomfort during your episodes of incontinence?`
+    next: `Do you experience any pain or severe discomfort when it's happening?`
 };
 
 const endOfDialog = (session, next) => {

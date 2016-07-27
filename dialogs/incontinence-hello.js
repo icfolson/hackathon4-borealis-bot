@@ -87,7 +87,7 @@ const createAppointmentConfirmationStrings = (confirmed) => {
     if (confirmed) {
         responseArray.push(generalMessages.AppointmentConfirmationMessages.positive);
         responseArray.push(`Looks like you're coming in for a ${appointmentReason}.`);
-        responseArray.push(`We want to make sure you have time to cover any converns you may have.`);
+        responseArray.push(`We want to make sure you have time to cover any concerns you may have.`);
         responseArray.push(`There are a few topics that come up regularly in appointments like yours. You may not be` + 
         ` experiencing any of the following, but I'll ask.`);
     }
@@ -101,6 +101,21 @@ const createAppointmentConfirmationStrings = (confirmed) => {
  * BEGIN: Greeting Dialog
  */
 const greetingDialog = (session, args, next) => {
+    if (!session.userData.flags) {
+        session.userData.flags = {
+            greeting: false,
+            what: false,
+            volume: false,
+            symptoms: false,
+            selfMeds: false,
+            frequency: false,
+            cause: false
+        };
+    };
+    if (session.userData.flags.greeting) {
+        endDialog(`We've met before, haven't we?`); // end dialog if it's been done
+    };
+    session.userData.flags.greeting = true; // set the flag
     if (!session.userData.intake) {
         const address = session.message;
         session.userData.intake = {
