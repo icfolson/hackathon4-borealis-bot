@@ -35,10 +35,10 @@ const phrases = {
     [keys.sleeping]: `These things sometimes happen when we sleep.`,
     [keys.alcohol]: `Alcohol can play a major role in urinary incontinence`,
     [keys.beverages]: `Often times beverages can play a role in urinary incontinence`,
-    [keys.smoking]: 'Smoking can play a major role in urinary incontinence',
+    [keys.smoking]: `Smoking might not be related to urinary incontinence, but it's still bad for you!`,
     [keys.temperature]: `How our body responds to temperature can directly impact out ability to hold our bladder.`,
-    [keys.emotions]: `Sometimes emotions can cause our body to do unexpected things.  I'll relate this to your doctor`,
-    [keys.sex]: `Sex can often times be a cause of incontinence.  I'll relate this to your doctor`,
+    [keys.emotions]: `Sometimes emotions can cause our body to do unexpected things.  I'll relay this to your doctor`,
+    [keys.sex]: `That might be another issue.  I'll relay this to your doctor in any case.`,
     alternate: `This could be a probable cause.  We'll send the info to your doctor.`
 };
 

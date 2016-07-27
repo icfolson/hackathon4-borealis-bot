@@ -30,7 +30,7 @@ const phrases = {
     base: `We'll make sure Dr. Strong has that information.`,
     misunderstood: `Sorry, I don't understand.  Have you tried to treat your incontinence?  If so, with what?`,
     next: `How often would you say you're experiencing your symptoms?`,
-    [keys.pads]: `Using pads and diapers to counteract the effects of incontinence is perfectly reasonable.  We'll let your doctor know.`,
+    [keys.pads]: `Using pads and diapers to manage the effects of incontinence is perfectly normal.  We'll let your doctor know.`,
     [keys.pills]: `It's best to use caution when self medicating, especially with pills, drugs, or alcohol. We'll relay this information to Dr. Strong.`
 };
 

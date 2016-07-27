@@ -30,7 +30,7 @@ const phrases = {
     misunderstood: `Sorry, I don't understand.  About how much urine would you say you lose during these experiences?`,
     next: `Have you done or tried anything to relieve your symptoms?  If so, what?`,
     [keys.sVolume]: `Though that's not necessarily anything to worry about, we'll still take note.`,
-    [keys.lVolume]: `I will definitely relate that information to your doctor for you.`
+    [keys.lVolume]: `I will definitely relay that information to your doctor for you.`
 };
 
 const endOfDialog = (session, next) => {
