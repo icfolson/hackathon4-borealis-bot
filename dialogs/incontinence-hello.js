@@ -100,7 +100,7 @@ const createAppointmentConfirmationStrings = (confirmed) => {
 const begin = (session, args, next) => {
     if (!session.userData.flags) {
         session.userData.flags = {
-            greeting: false,
+            greeting: true,
             what: false,
             volume: false,
             symptoms: false,
