@@ -37,6 +37,7 @@ const phrases = {
     [keys.beverages]: `Often times beverages can play a role in urinary incontinence`,
     [keys.smoking]: 'Smoking can play a major role in urinary incontinence',
     [keys.temperature]: `How our body responds to temperature can directly impact out ability to hold our bladder.`,
+    [keys.emotions]: `Sometimes emotions can cause our body to do unexpected things.  I'll relate this to your doctor`,
     alternate: `This could be a probable cause.  We'll send the info to your doctor.`
 };
 

@@ -12,7 +12,8 @@ const hashKeys = {
     lVolume: 'largeVolume',
     sVolume: 'smallVolume',
     pads: `Pads`,
-    pills: 'Pills'
+    pills: 'Pills',
+    emotions: 'emotions'
 };
 
 const synonymHash = {
@@ -27,7 +28,8 @@ const synonymHash = {
     [hashKeys.lVolume]: ['a lot', 'loads', 'tons', 'a bunch', 'too much'],
     [hashKeys.sVolume]: ['a bit', 'not much', 'some', 'a little'],
     [hashKeys.pads]: ['maxi pads', 'poise pads', 'depends', 'diapers', 'pads'],
-    [hashKeys.pills]: ['oxy', 'oxycontin', 'painkillers', 'pills', 'percocet']
+    [hashKeys.pills]: ['oxy', 'oxycontin', 'painkillers', 'pills', 'percocet'],
+    [hashKeys.emotions]: ['scared', 'sad', 'nervous', 'anxious', 'angry', 'upset', 'happy', 'laugh', 'cry']
 };
 
 /**
